@@ -40,7 +40,7 @@ button.smallbtn{width:auto;margin:0;padding:7px 10px;font-size:12px;border-radiu
 .record-status{display:flex;justify-content:space-between;align-items:center;gap:10px}.badge{font-size:11px;padding:5px 9px;border-radius:999px;background:#ecfdf5;color:var(--good);font-weight:700}.badge.new{background:#f3f4f6;color:var(--muted)}
 .archive{border:1px solid var(--line);border-radius:14px;margin:10px 0;overflow:hidden}.archive-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:13px;background:#fafafa}.archive-title{font-weight:800}.archive-main{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px}.archive-stat .label{font-size:10px}.archive-stat strong{font-size:14px}
 .history-entry{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:12px}.empty{padding:10px 0;color:var(--muted);font-size:12px}
-.sep{height:1px;background:var(--line);margin:14px 0}
+.sep{height:1px;background:var(--line);margin:14px 0}.editor-disabled{opacity:.45;pointer-events:none;filter:grayscale(.15)}
 </style>
 </head>
 <body>
@@ -108,14 +108,16 @@ button.smallbtn{width:auto;margin:0;padding:7px 10px;font-size:12px;border-radiu
 
   <div class="card" id="monthlyRecordCard">
     <h2>月次記録</h2>
-    <div class="small" style="margin-bottom:10px">記録したい年・月を自由に選べます。保存済みの年月を選ぶと、その月の入力内容が自動で表示され、あとから修正できます。</div>
+    <div class="small" style="margin-bottom:10px">過去・未来を問わず、まだ作っていない年月も自由に新規作成できます。年と月を指定して「この年月を新規作成／開く」を押してください。</div>
 
     <div class="period-picker">
-      <select id="recordYear" aria-label="年"></select>
+      <input id="recordYear" type="number" inputmode="numeric" placeholder="例 2027" aria-label="年">
       <select id="recordMonth" aria-label="月"></select>
     </div>
+    <button type="button" id="openRecordPeriod">この年月を新規作成／開く</button>
+    <div class="small" style="margin-top:7px">保存済みなら内容を開き、まだ存在しない年月なら新しい記録として作成できます。過去・未来どちらも自由に指定できます。</div>
 
-    <div class="record-head">
+    <div class="record-head" style="margin-top:12px">
       <div class="record-status">
         <div>
           <strong id="recordPeriodLabel">年月を選択</strong>
@@ -125,6 +127,7 @@ button.smallbtn{width:auto;margin:0;padding:7px 10px;font-size:12px;border-radiu
       </div>
     </div>
 
+    <div id="recordEditor" class="editor-disabled">
     <div class="actions">
       <button type="button" class="secondary" id="copyCurrentToRecord">現在の管理中データをコピー</button>
       <button type="button" class="secondary" id="clearRecordForm">入力欄をクリア</button>
@@ -154,6 +157,7 @@ button.smallbtn{width:auto;margin:0;padding:7px 10px;font-size:12px;border-radiu
 
     <button type="button" id="saveMonthlyRecord">この年月の記録を保存</button>
     <button type="button" class="danger" id="deleteMonthlyRecord">この年月の記録を削除</button>
+    </div>
   </div>
 
   <div class="card">
@@ -185,8 +189,8 @@ button.smallbtn{width:auto;margin:0;padding:7px 10px;font-size:12px;border-radiu
 <script>
 (function(){
 "use strict";
-var KEY="kakei-month-selector-v1";
-var LEGACY_KEYS=["kakei-single-v1","kakei-monthly-history-v1"];
+var KEY="kakei-month-selector-v2";
+var LEGACY_KEYS=["kakei-month-selector-v1","kakei-single-v1","kakei-monthly-history-v1"];
 var emptyState={
   settings:{salary:0,savingTarget:0,mortgage:0,fixedOther:0,familyShare:0.6667,familyBudget:0,paypayBudget:0},
   sync:{family:{amount:0,at:0},paypay:{amount:0,at:0}},
@@ -311,20 +315,33 @@ function syncCard(card,inputId){
 }
 
 /* ----- monthly record editor ----- */
+var activeRecordPeriod = null;
+
 function fillYearMonthOptions(){
-  var now=new Date(),cy=now.getFullYear(),y=el("recordYear"),m=el("recordMonth");
-  y.innerHTML="";
-  for(var yr=cy-10;yr<=cy+5;yr++){
-    var o=document.createElement("option");o.value=yr;o.textContent=yr+"年";y.appendChild(o)
-  }
+  var now=new Date(),y=el("recordYear"),m=el("recordMonth");
   m.innerHTML="";
   for(var mo=1;mo<=12;mo++){
     var op=document.createElement("option");op.value=mo;op.textContent=mo+"月";m.appendChild(op)
   }
-  y.value=cy;m.value=now.getMonth()+1
+  y.value=now.getFullYear();
+  m.value=now.getMonth()+1;
 }
-function selectedPeriod(){return el("recordYear").value+"-"+String(el("recordMonth").value).padStart(2,"0")}
-function recordFieldIds(){return ["recordSalary","recordSavingTarget","recordMortgage","recordFixedOther","recordFamilyTotal","recordFamilyShare","recordPaypay","recordOtherExpense","recordMemo"]}
+
+function pickerPeriod(){
+  var yr=parseInt(el("recordYear").value,10);
+  var mo=parseInt(el("recordMonth").value,10);
+  if(!yr || yr<1 || !mo || mo<1 || mo>12) return null;
+  return String(yr)+"-"+String(mo).padStart(2,"0");
+}
+
+function selectedPeriod(){
+  return activeRecordPeriod;
+}
+
+function setEditorEnabled(enabled){
+  el("recordEditor").className = enabled ? "" : "editor-disabled";
+}
+
 function clearRecordInputs(useDefaults){
   var s=state.settings;
   el("recordSalary").value="";
@@ -336,8 +353,9 @@ function clearRecordInputs(useDefaults){
   el("recordPaypay").value="";
   el("recordOtherExpense").value="";
   el("recordMemo").value="";
-  renderRecordCalc()
+  renderRecordCalc();
 }
+
 function archiveToEditor(a){
   var s=a.settings||{},q=a.summary||{};
   el("recordSalary").value=s.salary||"";
@@ -349,25 +367,45 @@ function archiveToEditor(a){
   el("recordPaypay").value=(q.paypay!==undefined?q.paypay:"");
   el("recordOtherExpense").value=(q.otherExpense!==undefined?q.otherExpense:"");
   el("recordMemo").value=a.memo||"";
-  renderRecordCalc()
+  renderRecordCalc();
 }
-function loadSelectedRecord(){
-  var p=selectedPeriod(),a=state.archives[p];
+
+function openPeriod(p){
+  if(!p){toast("年と月を指定してください");return}
+  activeRecordPeriod=p;
+  var a=state.archives[p];
+  setEditorEnabled(true);
   el("recordPeriodLabel").textContent=periodLabel(p);
+
   if(a){
     archiveToEditor(a);
-    el("recordBadge").textContent="保存済み";el("recordBadge").className="badge";
+    el("recordBadge").textContent="保存済み";
+    el("recordBadge").className="badge";
     el("recordSavedInfo").textContent="最終更新："+new Date(a.closedAt||a.updatedAt||Date.now()).toLocaleString("ja-JP");
     el("saveMonthlyRecord").textContent="この年月の記録を更新";
     el("deleteMonthlyRecord").style.display="block";
+    toast(periodLabel(p)+"を開きました");
   }else{
     clearRecordInputs(true);
-    el("recordBadge").textContent="未保存";el("recordBadge").className="badge new";
-    el("recordSavedInfo").textContent="新規記録";
+    el("recordBadge").textContent="新規";
+    el("recordBadge").className="badge new";
+    el("recordSavedInfo").textContent="この年月の記録はまだありません。新規作成できます。";
     el("saveMonthlyRecord").textContent="この年月の記録を保存";
     el("deleteMonthlyRecord").style.display="none";
+    toast(periodLabel(p)+"の新規記録を作成できます");
   }
 }
+
+function resetRecordChooser(){
+  activeRecordPeriod=null;
+  setEditorEnabled(false);
+  el("recordPeriodLabel").textContent="年月を指定して「新規作成／開く」を押してください";
+  el("recordSavedInfo").textContent="未選択";
+  el("recordBadge").textContent="未選択";
+  el("recordBadge").className="badge new";
+  el("deleteMonthlyRecord").style.display="none";
+}
+
 function recordCalc(){
   var salary=num("recordSalary"),target=num("recordSavingTarget"),mort=num("recordMortgage"),fixedOther=num("recordFixedOther");
   var famTotal=num("recordFamilyTotal"),share=num("recordFamilyShare"),pay=num("recordPaypay"),other=num("recordOtherExpense");
@@ -398,6 +436,7 @@ function currentToEditor(){
 }
 function saveSelectedRecord(){
   var p=selectedPeriod(),salary=num("recordSalary");
+  if(!p){toast("先に保存する年月を新規作成／開いてください");return}
   if(salary<=0){toast("手取り給与を入力してください");return}
   var old=state.archives[p],c=recordCalc();
   var settings={
@@ -417,7 +456,7 @@ function saveSelectedRecord(){
     memo:el("recordMemo").value,
     entries:old&&Array.isArray(old.entries)?old.entries:[]
   };
-  save();renderArchives();loadSelectedRecord();toast(periodLabel(p)+"を保存しました")
+  save();renderArchives();openPeriod(p);toast(periodLabel(p)+"を保存しました")
 }
 function renderArchives(){
   var box=el("archives"),keys=Object.keys(state.archives).sort().reverse(),total=0,rateTotal=0;
@@ -443,7 +482,7 @@ function renderArchives(){
       var parts=k.split("-");
       el("recordYear").value=Number(parts[0]);
       el("recordMonth").value=Number(parts[1]);
-      loadSelectedRecord();
+      openPeriod(k);
       el("monthlyRecordCard").scrollIntoView({behavior:"smooth",block:"start"})
     };
     box.appendChild(wrap)
@@ -466,8 +505,11 @@ function bind(){
   el("clearHistory").onclick=function(){if(confirm("今月の手入力履歴をすべて削除しますか？")){state.entries=[];save();renderCurrent();toast("履歴を削除しました")}};
   el("testButton").onclick=function(){toast("ボタンは正常に動いています");el("appStatus").textContent="✓ ボタン動作確認済み"};
 
-  el("recordYear").onchange=loadSelectedRecord;
-  el("recordMonth").onchange=loadSelectedRecord;
+  el("openRecordPeriod").onclick=function(){
+    var p=pickerPeriod();
+    if(!p){toast("年と月を指定してください");return}
+    openPeriod(p);
+  };
   ["recordSalary","recordSavingTarget","recordMortgage","recordFixedOther","recordFamilyTotal","recordFamilyShare","recordPaypay","recordOtherExpense"].forEach(function(id){
     el(id).addEventListener("input",renderRecordCalc)
   });
@@ -476,9 +518,9 @@ function bind(){
   el("saveMonthlyRecord").onclick=saveSelectedRecord;
   el("deleteMonthlyRecord").onclick=function(){
     var p=selectedPeriod();
-    if(!state.archives[p])return;
+    if(!p || !state.archives[p])return;
     if(confirm(periodLabel(p)+"の記録を削除しますか？")){
-      delete state.archives[p];save();renderArchives();loadSelectedRecord();toast("記録を削除しました")
+      delete state.archives[p];save();renderArchives();openPeriod(p);toast("記録を削除しました")
     }
   };
 
@@ -499,7 +541,7 @@ function bind(){
         var x=JSON.parse(r.result);
         if(!x||!x.settings||!x.sync||!Array.isArray(x.entries))throw new Error("bad");
         if(confirm("現在のデータをバックアップ内容で置き換えますか？")){
-          normalizeLoaded(x);save();hydrateCurrent();renderCurrent();renderArchives();loadSelectedRecord();toast("バックアップを復元しました")
+          normalizeLoaded(x);save();hydrateCurrent();renderCurrent();renderArchives();resetRecordChooser();toast("バックアップを復元しました")
         }
       }catch(e){alert("このファイルは家計アプリのバックアップとして読み込めませんでした")}
     };
@@ -513,7 +555,7 @@ fillYearMonthOptions();
 bind();
 renderCurrent();
 renderArchives();
-loadSelectedRecord();
+resetRecordChooser();
 el("appStatus").textContent="✓ アプリ読み込み完了";
 })();
 </script>
