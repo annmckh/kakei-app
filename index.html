@@ -6,403 +6,716 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="家計管理">
-<meta name="theme-color" content="#111827">
+<meta name="theme-color" content="#f7f7f8">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-192.png">
-<title>家計コントローラー</title>
+<title>家計管理</title>
 <style>
-:root{--bg:#f5f6f8;--card:#fff;--text:#111827;--muted:#6b7280;--line:#e5e7eb;--good:#0f766e;--warn:#b45309;--bad:#b91c1c;--accent:#111827}
-*{box-sizing:border-box}html,body{min-height:100%}
-body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
-.wrap{max-width:820px;margin:0 auto;padding:18px 14px 56px}
-h1{font-size:26px;margin:2px 0 4px}.sub{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:14px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px;box-shadow:0 2px 10px rgba(0,0,0,.03)}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:650px){.grid{grid-template-columns:1fr}}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}@media(max-width:650px){.grid3{grid-template-columns:1fr 1fr 1fr}}
-.label{font-size:12px;color:var(--muted);margin-bottom:5px}.big{font-size:30px;font-weight:800;letter-spacing:-.7px}.stat{font-size:20px;font-weight:800}
-h2{font-size:16px;margin:0 0 10px}
-.row{display:grid;grid-template-columns:1fr 145px;gap:10px;align-items:center;margin:10px 0}@media(max-width:650px){.row{grid-template-columns:1fr 130px}}
-input,select,textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:12px;font-size:16px;background:#fff;color:var(--text)}
-input[type=number]{text-align:right}textarea{min-height:80px;resize:vertical}
-button{width:100%;padding:12px 14px;border:0;border-radius:12px;background:var(--accent);color:#fff;font-size:15px;font-weight:750;margin-top:8px}
-button.secondary{background:#eef1f5;color:#111827;border:1px solid var(--line)}button.danger{background:#fff;color:var(--bad);border:1px solid #fecaca}
-button.smallbtn{width:auto;margin:0;padding:7px 10px;font-size:12px;border-radius:10px}
-.summary{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}.summary:last-child{border-bottom:0}
-.small{font-size:12px;color:var(--muted);line-height:1.5}.status{font-size:13px;font-weight:700;margin-top:7px}.good{color:var(--good)}.bad{color:var(--bad)}.warn{color:var(--warn)}
-.sync{background:#fafafa;border:1px dashed #d1d5db;border-radius:14px;padding:12px;margin-top:10px}
-.entry{display:grid;grid-template-columns:76px 1fr 90px 30px;gap:8px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);font-size:12px}
-.money{text-align:right;font-weight:700}.delete{width:30px;padding:0;margin:0;background:none;color:#9ca3af;font-size:20px}
-.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:#111827;color:#fff;padding:11px 14px;border-radius:12px;font-size:13px;opacity:0;pointer-events:none;transition:.2s;z-index:9999;white-space:nowrap}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.test{font-size:12px;padding:9px 10px;border-radius:10px;background:#eef7f4;color:#0f766e;margin-bottom:12px}
-.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.period-picker{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.period-banner{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#fafafa;border:1px solid var(--line);border-radius:14px;padding:13px;margin-top:12px}
-.badge{font-size:11px;padding:5px 9px;border-radius:999px;background:#ecfdf5;color:var(--good);font-weight:700}.badge.draft{background:#fff7ed;color:var(--warn)}
-.archive{border:1px solid var(--line);border-radius:14px;margin:10px 0;overflow:hidden}.archive-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:13px;background:#fafafa}.archive-title{font-weight:800}.archive-main{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px}.archive-stat .label{font-size:10px}.archive-stat strong{font-size:14px}
-.empty{padding:10px 0;color:var(--muted);font-size:12px}.sep{height:1px;background:var(--line);margin:14px 0}
+:root{
+  --bg:#f7f7f8;--card:#fff;--text:#111318;--muted:#747983;--line:#e8e9ec;
+  --accent:#17191f;--accent2:#2f333b;--good:#0f766e;--goodbg:#ecfdf5;
+  --warn:#a15c00;--warnbg:#fff7ed;--bad:#b42318;--badbg:#fff1f0;
+  --soft:#f1f2f4;--shadow:0 8px 28px rgba(16,24,40,.06);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{min-height:100%}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif;
+  padding-top:env(safe-area-inset-top);padding-bottom:calc(84px + env(safe-area-inset-bottom));
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.app{max-width:760px;margin:0 auto}
+.topbar{
+  position:sticky;top:0;z-index:20;background:rgba(247,247,248,.92);backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);padding:12px 16px 10px;border-bottom:1px solid rgba(232,233,236,.85)
+}
+.toprow{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{font-size:20px;font-weight:800;letter-spacing:-.4px}
+.monthbtn{
+  border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 12px;
+  font-weight:750;font-size:14px;display:flex;align-items:center;gap:6px
+}
+.content{padding:14px 14px 26px}
+.tab{display:none}.tab.active{display:block}
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;margin-bottom:12px;
+  box-shadow:0 2px 8px rgba(16,24,40,.025)
+}
+.hero{
+  padding:18px 18px 16px;background:linear-gradient(180deg,#fff 0%,#fbfbfc 100%);
+}
+.eyebrow{font-size:12px;color:var(--muted);font-weight:650;margin-bottom:4px}
+.heroValue{font-size:38px;font-weight:850;letter-spacing:-1.2px;line-height:1.05}
+.heroSub{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.45}
+.heroGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.mini{background:var(--soft);border-radius:14px;padding:12px}
+.mini .v{font-size:19px;font-weight:800;margin-top:3px}
+.statusrow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.badge{font-size:11px;font-weight:750;padding:5px 9px;border-radius:999px;background:var(--warnbg);color:var(--warn)}
+.badge.final{background:var(--goodbg);color:var(--good)}
+.sectionTitle{font-size:15px;font-weight:800;letter-spacing:-.1px;margin:0 0 12px}
+.account{padding:14px 0;border-bottom:1px solid var(--line)}.account:last-child{border-bottom:0;padding-bottom:0}.account:first-of-type{padding-top:0}
+.accountTop{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.accountName{font-weight:800}.accountAmount{font-size:20px;font-weight:850}
+.accountMeta{display:flex;justify-content:space-between;gap:10px;font-size:12px;color:var(--muted);margin-top:5px}
+.progress{height:8px;background:#eeeff1;border-radius:999px;overflow:hidden;margin-top:9px}
+.progress>div{height:100%;background:var(--accent);border-radius:999px;width:0;transition:.25s}
+.syncbtn{border:0;background:var(--soft);color:var(--text);padding:7px 10px;border-radius:10px;font-weight:750;font-size:12px}
+.primary{
+  width:100%;border:0;background:var(--accent);color:#fff;border-radius:15px;padding:14px 16px;
+  font-weight:800;font-size:16px;box-shadow:0 6px 16px rgba(17,19,24,.12)
+}
+.primary:disabled,.syncbtn:disabled{opacity:.45;cursor:not-allowed}
+.secondary{width:100%;border:1px solid var(--line);background:#fff;color:var(--text);border-radius:14px;padding:12px 14px;font-weight:750}
+.danger{width:100%;border:1px solid #f2c8c5;background:#fff;color:var(--bad);border-radius:14px;padding:12px 14px;font-weight:750}
+.quickWrap{margin:14px 0 12px}
+.transaction{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}
+.transaction:last-child{border-bottom:0;padding-bottom:0}
+.txLeft{min-width:0}.txTitle{font-weight:720;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.txMeta{font-size:11px;color:var(--muted);margin-top:3px}.txAmount{font-weight:800;font-size:14px}
+.empty{padding:14px 0;color:var(--muted);font-size:13px;text-align:center}
+.lockBanner{background:var(--goodbg);color:var(--good);padding:12px 13px;border-radius:14px;font-size:13px;font-weight:650;margin-bottom:12px;display:none}
+.lockBanner.show{display:block}
+.historyStats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.histStat{background:#fff;border:1px solid var(--line);border-radius:15px;padding:12px}
+.histStat .k{font-size:10px;color:var(--muted);font-weight:650}.histStat .v{font-size:17px;font-weight:850;margin-top:4px}
+.monthCard{background:#fff;border:1px solid var(--line);border-radius:17px;padding:14px;margin-bottom:9px}
+.monthHead{display:flex;justify-content:space-between;align-items:center;gap:12px}.monthName{font-weight:850;font-size:15px}
+.monthNums{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.monthNums .k{font-size:10px;color:var(--muted)}.monthNums .v{font-size:14px;font-weight:800;margin-top:2px}
+.openbtn{border:0;background:var(--soft);border-radius:10px;padding:7px 10px;font-size:12px;font-weight:750}
+.settingGroup{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px}
+.field{display:grid;grid-template-columns:1fr 145px;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line)}
+.field:last-child{border-bottom:0}
+.field label{font-size:14px;font-weight:620}
+.field input,.field select{
+  width:100%;border:1px solid var(--line);background:#fafafa;border-radius:11px;padding:9px 10px;font-size:15px;text-align:right;color:var(--text)
+}
+.field textarea{grid-column:1/-1;width:100%;border:1px solid var(--line);background:#fafafa;border-radius:12px;padding:10px;min-height:78px;resize:vertical}
+.help{font-size:12px;color:var(--muted);line-height:1.55;margin:-2px 0 12px}
+.rowBtns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.bottomnav{
+  position:fixed;left:50%;bottom:0;transform:translateX(-50%);z-index:30;width:min(760px,100%);
+  background:rgba(255,255,255,.94);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border-top:1px solid rgba(232,233,236,.95);padding:8px 10px calc(8px + env(safe-area-inset-bottom));
+  display:grid;grid-template-columns:repeat(3,1fr)
+}
+.navbtn{border:0;background:none;padding:7px 4px;color:var(--muted);font-size:11px;font-weight:700}
+.navbtn .icon{display:block;font-size:20px;line-height:1;margin-bottom:4px}.navbtn.active{color:var(--text)}
+.sheetBackdrop{position:fixed;inset:0;background:rgba(10,12,16,.36);z-index:80;display:none}
+.sheetBackdrop.show{display:block}
+.sheet{
+  position:fixed;left:50%;bottom:0;transform:translate(-50%,105%);z-index:90;width:min(760px,100%);
+  background:#fff;border-radius:24px 24px 0 0;padding:10px 16px calc(18px + env(safe-area-inset-bottom));
+  transition:.25s cubic-bezier(.2,.8,.2,1);max-height:88vh;overflow:auto
+}
+.sheet.show{transform:translate(-50%,0)}
+.handle{width:38px;height:5px;background:#d5d7db;border-radius:999px;margin:2px auto 14px}
+.sheetTitle{font-size:19px;font-weight:850;margin:0 0 14px}
+.amountInput{position:relative;margin:8px 0 14px}
+.amountInput span{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:26px;font-weight:800}
+.amountInput input{width:100%;border:1px solid var(--line);background:#fafafa;border-radius:16px;padding:14px 14px 14px 43px;font-size:30px;font-weight:850;text-align:right}
+.segment{display:grid;grid-template-columns:1fr 1fr;gap:7px;background:var(--soft);padding:4px;border-radius:14px;margin-bottom:12px}
+.segment button{border:0;background:transparent;border-radius:11px;padding:10px;font-weight:750;color:var(--muted)}
+.segment button.active{background:#fff;color:var(--text);box-shadow:0 1px 5px rgba(0,0,0,.07)}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0 14px}
+.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 11px;font-size:13px;font-weight:700;color:var(--muted)}
+.chip.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.sheet input.text{width:100%;border:1px solid var(--line);background:#fafafa;border-radius:13px;padding:11px 12px;font-size:15px;margin-bottom:12px}
+.syncInfo{background:var(--soft);padding:12px;border-radius:13px;margin-bottom:12px;font-size:13px;line-height:1.5}
+.monthPickerHead{display:flex;align-items:center;justify-content:center;gap:9px;margin-bottom:14px}
+.monthPickerHead button{border:0;background:var(--soft);width:38px;height:38px;border-radius:12px;font-weight:850}
+.monthPickerHead input{width:105px;border:1px solid var(--line);border-radius:12px;padding:8px;font-size:17px;font-weight:800;text-align:center}
+.monthGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.monthTile{border:1px solid var(--line);background:#fff;border-radius:14px;padding:14px 8px;font-weight:800;position:relative}
+.monthTile.exists:after{content:"";position:absolute;width:6px;height:6px;border-radius:50%;background:var(--accent);right:9px;top:9px}
+.monthTile.current{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.monthTile.final{background:#f7fffb}
+.toast{
+  position:fixed;left:50%;bottom:98px;transform:translate(-50%,20px);z-index:120;
+  background:#16181d;color:#fff;border-radius:12px;padding:10px 14px;font-size:13px;opacity:0;pointer-events:none;transition:.2s
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.detailGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.detailCell{background:var(--soft);border-radius:12px;padding:11px}.detailCell .k{font-size:10px;color:var(--muted)}.detailCell .v{font-size:15px;font-weight:800;margin-top:3px}
+@media(max-width:390px){.heroValue{font-size:34px}.field{grid-template-columns:1fr 132px}.historyStats{grid-template-columns:1fr 1fr 1fr}.histStat .v{font-size:15px}}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <h1>家計コントローラー</h1>
-  <div class="sub">年月ごとに完全に独立して管理します。選んだ年月の「上の入力内容」そのものが、その月の記録になります。</div>
-  <div class="test" id="appStatus">アプリを読み込み中…</div>
-
-  <div class="card">
-    <h2>管理する年月</h2>
-    <div class="period-picker">
-      <input id="workYear" type="number" inputmode="numeric" placeholder="例 2027">
-      <select id="workMonth"></select>
+<div class="app">
+  <header class="topbar">
+    <div class="toprow">
+      <div class="brand" id="screenTitle">ホーム</div>
+      <button class="monthbtn" id="monthButton"><span id="monthButtonText">年月を選択</span><span>⌄</span></button>
     </div>
-    <button type="button" id="openMonth">この年月を新規作成／開く</button>
-    <div class="small" style="margin-top:7px">過去・未来・まだ作っていない月も自由に作れます。保存済みならその月の内容を読み込みます。</div>
-    <div class="period-banner">
-      <div>
-        <div class="label">現在開いている月</div>
-        <strong id="activePeriodLabel">未選択</strong>
+  </header>
+
+  <main class="content">
+    <section id="tab-home" class="tab active">
+      <div id="homeNoMonth" class="card">
+        <div class="sectionTitle">まず管理する月を選びます</div>
+        <div class="help">過去・未来・まだ作っていない月も自由に作れます。</div>
+        <button class="primary" id="chooseMonthFromHome">年月を選ぶ</button>
       </div>
-      <span id="monthStatusBadge" class="badge draft">未選択</span>
-    </div>
-  </div>
 
-  <div id="workspace" style="display:none">
-    <div class="grid">
-      <div class="card"><div class="label" id="monthLeftLabel">この月あと使える</div><div class="big" id="monthLeft">¥0</div><div class="status" id="monthStatus"></div></div>
-      <div class="card"><div class="label">今週あと使える目安</div><div class="big" id="weekLeft">—</div><div class="small" id="weekHint"></div></div>
-    </div>
+      <div id="homeWorkspace" style="display:none">
+        <div id="lockBanner" class="lockBanner">この月は確定済みです。編集する場合は「設定」から編集を再開してください。</div>
 
-    <div class="card">
-      <h2>この月の設定</h2>
-      <div class="row"><span>手取り給与</span><input id="salary" type="number" inputmode="numeric" placeholder="例 600000"></div>
-      <div class="row"><span>貯金目標</span><input id="savingTarget" type="number" inputmode="numeric" placeholder="例 300000"></div>
-      <div class="row"><span>住宅ローン</span><input id="mortgage" type="number" inputmode="numeric" placeholder="例 136000"></div>
-      <div class="row"><span>ジム＋奨学金＋iDeCo</span><input id="fixedOther" type="number" inputmode="numeric" placeholder="例 23000"></div>
-      <div class="row"><span>家族カード負担率</span><input id="familyShare" type="number" inputmode="decimal" step="0.0001" value="0.6667"></div>
-      <div class="row"><span>家族カード月予算</span><input id="familyBudget" type="number" inputmode="numeric" placeholder="例 80000"></div>
-      <div class="row"><span>PayPay月予算</span><input id="paypayBudget" type="number" inputmode="numeric" placeholder="例 80000"></div>
-      <button type="button" id="saveSettings">設定を保存</button>
-    </div>
+        <div class="card hero">
+          <div class="statusrow">
+            <div>
+              <div class="eyebrow">貯金目標を守ったまま</div>
+              <div class="heroValue" id="monthLeft">¥0</div>
+            </div>
+            <span class="badge" id="statusBadge">編集中</span>
+          </div>
+          <div class="heroSub" id="monthLeftText">この月にあと使える金額です。</div>
+          <div class="heroGrid">
+            <div class="mini"><div class="eyebrow">今週あと</div><div class="v" id="weekLeft">—</div></div>
+            <div class="mini"><div class="eyebrow">貯金見込み</div><div class="v" id="savingForecast">¥0</div></div>
+          </div>
+        </div>
 
-    <div class="grid">
-      <div class="card">
-        <h2>家族カード</h2>
-        <div class="sync"><div class="small">カード画面の現在利用額</div><input id="familySnapshot" type="number" inputmode="numeric" placeholder="例 52340"><button type="button" id="syncFamily">現在利用額を同期</button><div class="small" id="familySyncInfo">未同期</div></div>
-        <div class="summary"><span>推定現在利用額</span><strong id="familyCurrent">¥0</strong></div>
-        <div class="summary"><span>予算まで残り</span><strong id="familyRemain">¥0</strong></div>
+        <div class="card">
+          <div class="sectionTitle">カード利用</div>
+
+          <div class="account">
+            <div class="accountTop">
+              <div><div class="accountName">家族カード</div><div class="accountAmount" id="familyCurrent">¥0</div></div>
+              <button class="syncbtn" data-sync="family">実績を同期</button>
+            </div>
+            <div class="accountMeta"><span id="familyBudgetText">予算 ¥0</span><span id="familyRemain">残り ¥0</span></div>
+            <div class="progress"><div id="familyProgress"></div></div>
+          </div>
+
+          <div class="account">
+            <div class="accountTop">
+              <div><div class="accountName">PayPay</div><div class="accountAmount" id="paypayCurrent">¥0</div></div>
+              <button class="syncbtn" data-sync="paypay">実績を同期</button>
+            </div>
+            <div class="accountMeta"><span id="paypayBudgetText">予算 ¥0</span><span id="paypayRemain">残り ¥0</span></div>
+            <div class="progress"><div id="paypayProgress"></div></div>
+          </div>
+        </div>
+
+        <div class="quickWrap">
+          <button class="primary" id="quickAddBtn">＋ 支出を追加</button>
+        </div>
+
+        <div class="card">
+          <div class="statusrow"><div class="sectionTitle" style="margin:0">最近の支出</div><button class="syncbtn" id="showAllTx">すべて見る</button></div>
+          <div id="recentTx"></div>
+        </div>
+
+        <div class="card">
+          <div class="sectionTitle">今月の内訳</div>
+          <div class="detailGrid">
+            <div class="detailCell"><div class="k">固定費</div><div class="v" id="fixedTotal">¥0</div></div>
+            <div class="detailCell"><div class="k">家族カード負担</div><div class="v" id="familyMine">¥0</div></div>
+            <div class="detailCell"><div class="k">PayPay</div><div class="v" id="paypayMine">¥0</div></div>
+            <div class="detailCell"><div class="k">その他</div><div class="v" id="otherMine">¥0</div></div>
+          </div>
+          <div class="accountMeta"><span>総支出</span><strong id="expenseTotal">¥0</strong></div>
+        </div>
       </div>
-      <div class="card">
-        <h2>PayPayカード</h2>
-        <div class="sync"><div class="small">カード画面の現在利用額</div><input id="paypaySnapshot" type="number" inputmode="numeric" placeholder="例 46120"><button type="button" id="syncPaypay">現在利用額を同期</button><div class="small" id="paypaySyncInfo">未同期</div></div>
-        <div class="summary"><span>推定現在利用額</span><strong id="paypayCurrent">¥0</strong></div>
-        <div class="summary"><span>予算まで残り</span><strong id="paypayRemain">¥0</strong></div>
+    </section>
+
+    <section id="tab-history" class="tab">
+      <div class="historyStats">
+        <div class="histStat"><div class="k">累計貯金</div><div class="v" id="histTotal">¥0</div></div>
+        <div class="histStat"><div class="k">月平均</div><div class="v" id="histAvg">¥0</div></div>
+        <div class="histStat"><div class="k">平均貯蓄率</div><div class="v" id="histRate">0%</div></div>
       </div>
-    </div>
+      <button class="primary" id="createMonthBtn" style="margin-bottom:12px">＋ 新しい月を作る</button>
+      <div id="historyList"></div>
+    </section>
 
-    <div class="card">
-      <h2>使った額を追加</h2>
-      <div class="row"><span>カード</span><select id="entryCard"><option value="paypay">PayPay</option><option value="family">家族カード</option></select></div>
-      <div class="row"><span>カテゴリ</span><select id="entryCategory"><option value="free">自由支出</option><option value="transport">交通費</option><option value="food">食費・日用品</option><option value="other">その他</option></select></div>
-      <div class="row"><span>金額</span><input id="entryAmount" type="number" inputmode="numeric" placeholder="例 1280"></div>
-      <input id="entryMemo" type="text" placeholder="メモ（例：ランチ、Amazon、スーパー）">
-      <button type="button" id="addEntry">支出を追加</button>
-    </div>
+    <section id="tab-settings" class="tab">
+      <div id="settingsNoMonth" class="card">
+        <div class="sectionTitle">月が選択されていません</div>
+        <button class="primary" id="chooseMonthFromSettings">年月を選ぶ</button>
+      </div>
 
-    <div class="card">
-      <h2>この月の追加情報</h2>
-      <div class="row"><span>その他支出（現金など）</span><input id="otherExpense" type="number" inputmode="numeric" placeholder="なければ0"></div>
-      <div class="small" style="margin:8px 0 5px">月メモ</div>
-      <textarea id="monthMemo" placeholder="例：旅行あり、家具購入あり、カード請求確定済み"></textarea>
-      <button type="button" id="saveExtra">追加情報を保存</button>
-    </div>
+      <div id="settingsWorkspace" style="display:none">
+        <div class="settingGroup">
+          <div class="sectionTitle">この月の設定</div>
+          <div class="help">ここだけ変更しても、他の月には影響しません。</div>
+          <div class="field"><label>手取り給与</label><input id="mSalary" type="number" inputmode="numeric"></div>
+          <div class="field"><label>貯金目標</label><input id="mSavingTarget" type="number" inputmode="numeric"></div>
+          <div class="field"><label>住宅ローン</label><input id="mMortgage" type="number" inputmode="numeric"></div>
+          <div class="field"><label>ジム＋奨学金＋iDeCo</label><input id="mFixedOther" type="number" inputmode="numeric"></div>
+          <div class="field"><label>家族カード負担率</label><input id="mFamilyShare" type="number" inputmode="decimal" step="0.0001"></div>
+          <div class="field"><label>家族カード予算</label><input id="mFamilyBudget" type="number" inputmode="numeric"></div>
+          <div class="field"><label>PayPay予算</label><input id="mPaypayBudget" type="number" inputmode="numeric"></div>
+          <div class="field"><label>その他支出</label><input id="mOtherExpense" type="number" inputmode="numeric"></div>
+          <div class="field"><label>月メモ</label><textarea id="mMemo" placeholder="旅行、家具購入など"></textarea></div>
+          <button class="primary" id="saveMonthSettings">この月の設定を保存</button>
+        </div>
 
-    <div class="card">
-      <h2>この月の収支</h2>
-      <div class="summary"><span>固定費</span><strong id="fixedTotal">¥0</strong></div>
-      <div class="summary"><span>家族カード自分負担</span><strong id="familyMine">¥0</strong></div>
-      <div class="summary"><span>PayPay利用額</span><strong id="paypayMine">¥0</strong></div>
-      <div class="summary"><span>その他支出</span><strong id="otherMine">¥0</strong></div>
-      <div class="summary"><span>総支出</span><strong id="expenseForecast">¥0</strong></div>
-      <div class="summary"><span>貯金額</span><strong id="savingForecast">¥0</strong></div>
-      <div class="summary"><span>貯蓄率</span><strong id="savingRate">0%</strong></div>
-      <div class="summary"><span>貯金目標との差</span><strong id="savingGap">¥0</strong></div>
-      <button type="button" id="finalizeMonth">この月の収支を確定</button>
-      <button type="button" class="secondary" id="reopenMonth">確定を解除して編集する</button>
-    </div>
+        <div class="settingGroup">
+          <div class="sectionTitle">月の確定</div>
+          <div class="help" id="finalHelp">月末に確定すると、誤操作を防ぐため編集をロックします。</div>
+          <button class="primary" id="finalizeBtn">この月の収支を確定</button>
+          <button class="secondary" id="reopenBtn" style="display:none;margin-top:8px">編集を再開する</button>
+        </div>
+      </div>
 
-    <div class="card">
-      <h2>支出履歴</h2>
-      <div id="entries"><div class="empty">まだ支出履歴はありません。</div></div>
-      <button type="button" class="danger" id="clearHistory">この月の手入力履歴を削除</button>
-    </div>
-  </div>
+      <div class="settingGroup">
+        <div class="sectionTitle">新しい月の初期値</div>
+        <div class="help">新しく月を作ると、この数字が自動で入ります。</div>
+        <div class="field"><label>手取り給与</label><input id="dSalary" type="number" inputmode="numeric"></div>
+        <div class="field"><label>貯金目標</label><input id="dSavingTarget" type="number" inputmode="numeric"></div>
+        <div class="field"><label>住宅ローン</label><input id="dMortgage" type="number" inputmode="numeric"></div>
+        <div class="field"><label>ジム＋奨学金＋iDeCo</label><input id="dFixedOther" type="number" inputmode="numeric"></div>
+        <div class="field"><label>家族カード負担率</label><input id="dFamilyShare" type="number" inputmode="decimal" step="0.0001"></div>
+        <div class="field"><label>家族カード予算</label><input id="dFamilyBudget" type="number" inputmode="numeric"></div>
+        <div class="field"><label>PayPay予算</label><input id="dPaypayBudget" type="number" inputmode="numeric"></div>
+        <button class="primary" id="saveDefaults">初期値を保存</button>
+      </div>
 
-  <div class="card">
-    <h2>作成済みの月</h2>
-    <div class="grid3">
-      <div><div class="label">累計貯金</div><div class="stat" id="totalSavings">¥0</div></div>
-      <div><div class="label">月平均の貯金</div><div class="stat" id="avgSavings">¥0</div></div>
-      <div><div class="label">平均貯蓄率</div><div class="stat" id="avgRate">0%</div></div>
-    </div>
-    <div id="monthList"></div>
-    <div class="actions" style="margin-top:12px">
-      <button type="button" class="secondary" id="exportBackup">バックアップ保存</button>
-      <button type="button" class="secondary" id="importBackup">バックアップ復元</button>
-    </div>
-    <input type="file" id="backupFile" accept="application/json" style="display:none">
-  </div>
-
-  <div class="card"><button type="button" class="secondary" id="testButton">動作テスト</button></div>
+      <div class="settingGroup">
+        <div class="sectionTitle">データ管理</div>
+        <div class="help">データはこのiPhone内に保存されます。端末変更やSafariデータ削除に備えて、たまにバックアップしてください。</div>
+        <div class="rowBtns">
+          <button class="secondary" id="exportBackup">バックアップ</button>
+          <button class="secondary" id="importBackup">復元</button>
+        </div>
+        <input id="backupFile" type="file" accept="application/json" style="display:none">
+      </div>
+    </section>
+  </main>
 </div>
-<div class="toast" id="toast"></div>
+
+<nav class="bottomnav">
+  <button class="navbtn active" data-tab="home"><span class="icon">⌂</span>ホーム</button>
+  <button class="navbtn" data-tab="history"><span class="icon">▤</span>履歴</button>
+  <button class="navbtn" data-tab="settings"><span class="icon">⚙︎</span>設定</button>
+</nav>
+
+<div id="sheetBackdrop" class="sheetBackdrop"></div>
+
+<div id="addSheet" class="sheet">
+  <div class="handle"></div>
+  <h3 class="sheetTitle">支出を追加</h3>
+  <div class="amountInput"><span>¥</span><input id="addAmount" type="number" inputmode="numeric" placeholder="0"></div>
+  <div class="segment">
+    <button data-addcard="paypay" class="active">PayPay</button>
+    <button data-addcard="family">家族カード</button>
+  </div>
+  <div class="eyebrow">カテゴリ</div>
+  <div class="chips">
+    <button class="chip active" data-cat="free">自由支出</button>
+    <button class="chip" data-cat="transport">交通費</button>
+    <button class="chip" data-cat="food">食費・日用品</button>
+    <button class="chip" data-cat="other">その他</button>
+  </div>
+  <input class="text" id="addMemo" type="text" placeholder="メモ（任意）">
+  <button class="primary" id="saveEntryBtn">追加する</button>
+</div>
+
+<div id="syncSheet" class="sheet">
+  <div class="handle"></div>
+  <h3 class="sheetTitle" id="syncTitle">実績を同期</h3>
+  <div class="syncInfo" id="syncInfo"></div>
+  <div class="amountInput"><span>¥</span><input id="syncAmount" type="number" inputmode="numeric" placeholder="0"></div>
+  <button class="primary" id="saveSyncBtn">この金額に合わせる</button>
+</div>
+
+<div id="monthSheet" class="sheet">
+  <div class="handle"></div>
+  <h3 class="sheetTitle">年月を選ぶ</h3>
+  <div class="monthPickerHead">
+    <button id="prevYear">‹</button>
+    <input id="pickerYear" type="number" inputmode="numeric">
+    <button id="nextYear">›</button>
+  </div>
+  <div id="monthGrid" class="monthGrid"></div>
+  <div class="help" style="margin-top:12px">● が付いている月は作成済みです。未作成の月を押すと新しく作成します。</div>
+</div>
+
+<div id="txSheet" class="sheet">
+  <div class="handle"></div>
+  <h3 class="sheetTitle">支出履歴</h3>
+  <div id="allTx"></div>
+</div>
+
+<div id="detailSheet" class="sheet">
+  <div class="handle"></div>
+  <h3 class="sheetTitle" id="detailTitle">月の記録</h3>
+  <div id="detailBody"></div>
+  <button class="primary" id="openDetailMonth">この月を開く</button>
+</div>
+
+<div id="toast" class="toast"></div>
 
 <script>
 (function(){
 "use strict";
-var KEY="kakei-workspace-v1";
-var LEGACY_KEYS=["kakei-month-selector-v2","kakei-month-selector-v1","kakei-single-v1","kakei-monthly-history-v1"];
-var state={activePeriod:null,months:{}};
+
+var KEY="kakei-pro-ui-v1";
+var LEGACY_KEYS=["kakei-workspace-v1","kakei-month-selector-v2","kakei-month-selector-v1","kakei-single-v1","kakei-monthly-history-v1"];
+var state={
+  activePeriod:null,
+  defaults:{salary:0,savingTarget:0,mortgage:0,fixedOther:0,familyShare:0.6667,familyBudget:0,paypayBudget:0},
+  months:{}
+};
+var ui={tab:"home",addCard:"paypay",addCat:"free",syncCard:null,detailPeriod:null,pickerYear:(new Date()).getFullYear()};
 
 function el(id){return document.getElementById(id)}
-function n(id){var x=parseFloat(el(id).value);return isNaN(x)?0:x}
 function yen(v){v=Math.round(Number(v)||0);return (v<0?"−":"")+"¥"+Math.abs(v).toLocaleString("ja-JP")}
 function pct(v){return ((Number(v)||0)*100).toFixed(1).replace(".0","")+"%"}
-function toast(msg){var t=el("toast");t.textContent=msg;t.className="toast show";setTimeout(function(){t.className="toast"},1600)}
-function nowPeriod(){var d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")}
-function periodLabel(p){var a=String(p||"").split("-");return a.length===2?Number(a[0])+"年"+Number(a[1])+"月":p}
+function val(id){var x=parseFloat(el(id).value);return isNaN(x)?0:x}
 function esc(s){return String(s||"").replace(/[&<>\"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]})}
-function blankMonth(defaults){
-  defaults=defaults||{};
+function periodLabel(p){var a=String(p||"").split("-");return a.length===2?Number(a[0])+"年"+Number(a[1])+"月":p}
+function nowPeriod(){var d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")}
+function toast(msg){var t=el("toast");t.textContent=msg;t.classList.add("show");setTimeout(function(){t.classList.remove("show")},1700)}
+function blankMonth(){
+  var d=state.defaults;
   return {
     status:"draft",
     settings:{
-      salary:0,
-      savingTarget:Number(defaults.savingTarget||0),
-      mortgage:Number(defaults.mortgage||0),
-      fixedOther:Number(defaults.fixedOther||0),
-      familyShare:Number(defaults.familyShare||0.6667),
-      familyBudget:Number(defaults.familyBudget||0),
-      paypayBudget:Number(defaults.paypayBudget||0)
+      salary:Number(d.salary||0),savingTarget:Number(d.savingTarget||0),mortgage:Number(d.mortgage||0),
+      fixedOther:Number(d.fixedOther||0),familyShare:Number(d.familyShare||0.6667),
+      familyBudget:Number(d.familyBudget||0),paypayBudget:Number(d.paypayBudget||0)
     },
     sync:{family:{amount:0,at:0},paypay:{amount:0,at:0}},
-    entries:[],
-    otherExpense:0,
-    memo:"",
-    updatedAt:Date.now()
+    entries:[],otherExpense:0,memo:"",updatedAt:Date.now()
   }
 }
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state));return true}catch(e){toast("保存できませんでした");return false}}
+function normalize(){
+  if(!state.defaults)state.defaults={salary:0,savingTarget:0,mortgage:0,fixedOther:0,familyShare:0.6667,familyBudget:0,paypayBudget:0};
+  if(!state.months)state.months={};
+  Object.keys(state.months).forEach(function(p){
+    var m=state.months[p];
+    if(!m.settings)m.settings={};
+    if(!m.sync)m.sync={family:{amount:0,at:0},paypay:{amount:0,at:0}};
+    if(!m.sync.family)m.sync.family={amount:0,at:0};
+    if(!m.sync.paypay)m.sync.paypay={amount:0,at:0};
+    if(!Array.isArray(m.entries))m.entries=[];
+    if(!m.status)m.status="draft";
+  });
+}
 function load(){
   try{
     var raw=localStorage.getItem(KEY);
-    if(raw){state=JSON.parse(raw);if(!state.months)state.months={};return}
+    if(raw){state=JSON.parse(raw);normalize();return}
   }catch(e){}
-  migrateLegacy();
+  migrateLegacy()
 }
 function migrateLegacy(){
-  var raw=null,obj=null,key=null;
+  var raw=null,obj=null;
   for(var i=0;i<LEGACY_KEYS.length;i++){
-    try{raw=localStorage.getItem(LEGACY_KEYS[i]);if(raw){key=LEGACY_KEYS[i];break}}catch(e){}
+    try{raw=localStorage.getItem(LEGACY_KEYS[i]);if(raw)break}catch(e){}
   }
   if(!raw)return;
   try{obj=JSON.parse(raw)}catch(e){return}
 
-  if(obj.archives && typeof obj.archives==="object"){
-    Object.keys(obj.archives).forEach(function(p){
-      var a=obj.archives[p],s=a.settings||{},q=a.summary||{};
-      state.months[p]={
-        status:"final",
-        settings:{
-          salary:Number(s.salary||0),savingTarget:Number(s.savingTarget||0),
-          mortgage:Number(s.mortgage||0),fixedOther:Number(s.fixedOther||0),
-          familyShare:Number(s.familyShare||0.6667),familyBudget:Number(s.familyBudget||0),
-          paypayBudget:Number(s.paypayBudget||0)
-        },
-        sync:{family:{amount:Number(q.familyTotal||0),at:Date.now()},paypay:{amount:Number(q.paypay||0),at:Date.now()}},
-        entries:Array.isArray(a.entries)?a.entries:[],
-        otherExpense:Number(q.otherExpense||0),memo:a.memo||"",updatedAt:a.closedAt||Date.now()
-      };
-    });
-  }
-
-  if(obj.settings && obj.sync){
-    var p=nowPeriod();
-    if(!state.months[p]){
-      state.months[p]={
-        status:"draft",
-        settings:Object.assign(blankMonth().settings,obj.settings||{}),
-        sync:{
-          family:Object.assign({amount:0,at:0},(obj.sync&&obj.sync.family)||{}),
-          paypay:Object.assign({amount:0,at:0},(obj.sync&&obj.sync.paypay)||{})
-        },
-        entries:Array.isArray(obj.entries)?obj.entries:[],
-        otherExpense:0,memo:"",updatedAt:Date.now()
-      };
+  if(obj.months && typeof obj.months==="object"){
+    state.months=obj.months;
+    state.activePeriod=obj.activePeriod||null;
+    var ap=state.activePeriod&&state.months[state.activePeriod]?state.months[state.activePeriod]:null;
+    if(ap)state.defaults=Object.assign({},state.defaults,ap.settings||{});
+  }else{
+    if(obj.archives && typeof obj.archives==="object"){
+      Object.keys(obj.archives).forEach(function(p){
+        var a=obj.archives[p],s=a.settings||{},q=a.summary||{};
+        state.months[p]={
+          status:"final",
+          settings:{
+            salary:Number(s.salary||0),savingTarget:Number(s.savingTarget||0),mortgage:Number(s.mortgage||0),
+            fixedOther:Number(s.fixedOther||0),familyShare:Number(s.familyShare||0.6667),
+            familyBudget:Number(s.familyBudget||0),paypayBudget:Number(s.paypayBudget||0)
+          },
+          sync:{family:{amount:Number(q.familyTotal||0),at:Date.now()},paypay:{amount:Number(q.paypay||0),at:Date.now()}},
+          entries:Array.isArray(a.entries)?a.entries:[],otherExpense:Number(q.otherExpense||0),memo:a.memo||"",updatedAt:a.closedAt||Date.now()
+        }
+      })
     }
-    state.activePeriod=p;
+    if(obj.settings && obj.sync){
+      var p=nowPeriod();
+      if(!state.months[p]){
+        state.months[p]={
+          status:"draft",settings:Object.assign({},state.defaults,obj.settings||{}),
+          sync:{
+            family:Object.assign({amount:0,at:0},(obj.sync&&obj.sync.family)||{}),
+            paypay:Object.assign({amount:0,at:0},(obj.sync&&obj.sync.paypay)||{})
+          },
+          entries:Array.isArray(obj.entries)?obj.entries:[],otherExpense:0,memo:"",updatedAt:Date.now()
+        }
+      }
+      state.activePeriod=p;
+      state.defaults=Object.assign({},state.defaults,obj.settings||{})
+    }
   }
-  save();
+  normalize();save()
 }
 function currentMonth(){return state.activePeriod?state.months[state.activePeriod]:null}
-function defaultsForNew(){
-  var keys=Object.keys(state.months).sort().reverse();
-  var src=state.activePeriod&&state.months[state.activePeriod]?state.months[state.activePeriod]:(keys.length?state.months[keys[0]]:null);
-  return src?src.settings:{}
-}
-function pickerPeriod(){
-  var y=parseInt(el("workYear").value,10),m=parseInt(el("workMonth").value,10);
-  if(!y||y<1||!m||m<1||m>12)return null;
-  return String(y)+"-"+String(m).padStart(2,"0")
-}
-function fillPicker(){
-  var d=new Date();el("workYear").value=d.getFullYear();el("workMonth").innerHTML="";
-  for(var m=1;m<=12;m++){var o=document.createElement("option");o.value=m;o.textContent=m+"月";el("workMonth").appendChild(o)}
-  el("workMonth").value=d.getMonth()+1
-}
-function openPeriod(p){
-  if(!p){toast("年と月を指定してください");return}
-  if(!state.months[p])state.months[p]=blankMonth(defaultsForNew());
-  state.activePeriod=p;state.months[p].updatedAt=Date.now();save();
-  hydrateWorkspace();renderAll();toast(periodLabel(p)+"を開きました")
-}
-function hydrateWorkspace(){
-  var m=currentMonth();if(!m){el("workspace").style.display="none";return}
-  el("workspace").style.display="block";
-  var s=m.settings;
-  ["salary","savingTarget","mortgage","fixedOther","familyShare","familyBudget","paypayBudget"].forEach(function(id){el(id).value=(s[id]!==undefined?s[id]:"")});
-  el("otherExpense").value=m.otherExpense||"";
-  el("monthMemo").value=m.memo||"";
-  el("activePeriodLabel").textContent=periodLabel(state.activePeriod);
-  el("monthStatusBadge").textContent=m.status==="final"?"確定済み":"編集中";
-  el("monthStatusBadge").className=m.status==="final"?"badge":"badge draft";
-}
-function pullSettings(){
-  var m=currentMonth();if(!m)return;
-  ["salary","savingTarget","mortgage","fixedOther","familyShare","familyBudget","paypayBudget"].forEach(function(id){m.settings[id]=n(id)});
-  m.updatedAt=Date.now()
-}
-function added(card){
-  var m=currentMonth(),cut=(m.sync[card]&&m.sync[card].at)||0,total=0;
+function isLocked(){var m=currentMonth();return !!(m&&m.status==="final")}
+function addedSince(m,card){
+  var cut=(m.sync[card]&&m.sync[card].at)||0,total=0;
   m.entries.forEach(function(e){if(e.card===card&&e.at>cut)total+=Number(e.amount)||0});
   return total
 }
-function cardCurrent(card){
-  var m=currentMonth();return m?Number(m.sync[card].amount||0)+added(card):0
-}
+function cardCurrent(m,card){return Number(m.sync[card].amount||0)+addedSince(m,card)}
 function summary(m){
   if(!m)return{fixed:0,familyTotal:0,familyMine:0,paypay:0,other:0,expense:0,saving:0,rate:0,gap:0,left:0};
-  var s=m.settings,fam=Number(m.sync.family.amount||0),pay=Number(m.sync.paypay.amount||0);
-  // When active, include unsynced manual additions; for archived too, entries after last sync count.
-  var famAdd=0,payAdd=0,fc=m.sync.family.at||0,pc=m.sync.paypay.at||0;
-  m.entries.forEach(function(e){
-    if(e.card==="family"&&e.at>fc)famAdd+=Number(e.amount)||0;
-    if(e.card==="paypay"&&e.at>pc)payAdd+=Number(e.amount)||0;
-  });
-  fam+=famAdd;pay+=payAdd;
+  var s=m.settings,fam=cardCurrent(m,"family"),pay=cardCurrent(m,"paypay");
   var fixed=Number(s.mortgage||0)+Number(s.fixedOther||0),famMine=fam*Number(s.familyShare||0),other=Number(m.otherExpense||0);
   var expense=fixed+famMine+pay+other,saving=Number(s.salary||0)-expense;
-  return{fixed:fixed,familyTotal:fam,familyMine:famMine,paypay:pay,other:other,expense:expense,saving:saving,rate:Number(s.salary||0)>0?saving/Number(s.salary||0):0,gap:saving-Number(s.savingTarget||0),left:Number(s.salary||0)-fixed-Number(s.savingTarget||0)-famMine-pay-other}
-}
-function isCurrentCalendarMonth(){return state.activePeriod===nowPeriod()}
-function remainingDaysMonth(){var d=new Date(),last=new Date(d.getFullYear(),d.getMonth()+1,0);return Math.max(1,last.getDate()-d.getDate()+1)}
-function remainingDaysWeek(){var d=new Date(),dow=d.getDay(),toSun=dow===0?0:7-dow;return Math.max(1,Math.min(toSun+1,remainingDaysMonth()))}
-function renderWorkspace(){
-  var m=currentMonth();if(!m)return;
-  var s=m.settings,q=summary(m);
-  el("monthLeft").textContent=yen(q.left);
-  if(Number(s.salary||0)<=0){el("monthStatus").textContent="手取り給与を入力してください";el("monthStatus").className="status"}
-  else if(q.left>=0){el("monthStatus").textContent="貯金目標を守ったまま使える残額";el("monthStatus").className="status good"}
-  else{el("monthStatus").textContent="貯金目標を "+yen(Math.abs(q.left))+" 超過見込み";el("monthStatus").className="status bad"}
-
-  if(isCurrentCalendarMonth()){
-    var dm=remainingDaysMonth(),dw=remainingDaysWeek();
-    el("weekLeft").textContent=yen(q.left>0?q.left/dm*dw:q.left);
-    el("weekHint").textContent="今月残り"+dm+"日で均等配分した、日曜まで"+dw+"日分の目安";
-  }else{
-    el("weekLeft").textContent="—";
-    el("weekHint").textContent="今週残額は現在の年月を開いたときだけ表示します";
+  return{
+    fixed:fixed,familyTotal:fam,familyMine:famMine,paypay:pay,other:other,expense:expense,saving:saving,
+    rate:Number(s.salary||0)>0?saving/Number(s.salary||0):0,gap:saving-Number(s.savingTarget||0),
+    left:Number(s.salary||0)-fixed-Number(s.savingTarget||0)-famMine-pay-other
   }
-
-  el("familyCurrent").textContent=yen(q.familyTotal);el("paypayCurrent").textContent=yen(q.paypay);
-  el("familyRemain").textContent=yen(Number(s.familyBudget||0)-q.familyTotal);el("paypayRemain").textContent=yen(Number(s.paypayBudget||0)-q.paypay);
-  el("familySyncInfo").textContent=m.sync.family.at?"実績 "+yen(m.sync.family.amount)+" ＋ 同期後入力 "+yen(added("family")):"未同期";
-  el("paypaySyncInfo").textContent=m.sync.paypay.at?"実績 "+yen(m.sync.paypay.amount)+" ＋ 同期後入力 "+yen(added("paypay")):"未同期";
-  el("fixedTotal").textContent=yen(q.fixed);el("familyMine").textContent=yen(q.familyMine);el("paypayMine").textContent=yen(q.paypay);el("otherMine").textContent=yen(q.other);
-  el("expenseForecast").textContent=yen(q.expense);el("savingForecast").textContent=yen(q.saving);el("savingRate").textContent=pct(q.rate);el("savingGap").textContent=yen(q.gap);
-  el("reopenMonth").style.display=m.status==="final"?"block":"none";
-  el("finalizeMonth").textContent=m.status==="final"?"確定内容を更新":"この月の収支を確定";
-  renderEntries()
 }
-function renderEntries(){
-  var m=currentMonth(),box=el("entries");box.innerHTML="";
-  if(!m||!m.entries.length){box.innerHTML='<div class="empty">まだ支出履歴はありません。</div>';return}
-  m.entries.slice().sort(function(a,b){return b.at-a.at}).forEach(function(e){
-    var d=new Date(e.at),row=document.createElement("div");row.className="entry";
-    row.innerHTML='<div class="small">'+(d.getMonth()+1)+'/'+d.getDate()+'</div><div>'+(e.card==="family"?"家族":"PayPay")+' / '+esc(e.memo||e.category)+'</div><div class="money">'+yen(e.amount)+'</div><button type="button" class="delete">×</button>';
-    row.querySelector(".delete").onclick=function(){m.entries=m.entries.filter(function(x){return x.id!==e.id});m.updatedAt=Date.now();save();renderAll();toast("削除しました")};
+function daysMonth(){var d=new Date(),last=new Date(d.getFullYear(),d.getMonth()+1,0);return Math.max(1,last.getDate()-d.getDate()+1)}
+function daysWeek(){var d=new Date(),dow=d.getDay(),toSun=dow===0?0:7-dow;return Math.max(1,Math.min(toSun+1,daysMonth()))}
+
+function setTab(name){
+  ui.tab=name;
+  document.querySelectorAll(".tab").forEach(function(x){x.classList.remove("active")});
+  document.querySelectorAll(".navbtn").forEach(function(x){x.classList.remove("active")});
+  el("tab-"+name).classList.add("active");
+  document.querySelector('.navbtn[data-tab="'+name+'"]').classList.add("active");
+  el("screenTitle").textContent=name==="home"?"ホーム":name==="history"?"履歴":"設定";
+  window.scrollTo({top:0,behavior:"smooth"});
+  if(name==="settings")hydrateSettings()
+}
+function openSheet(id){
+  el("sheetBackdrop").classList.add("show");el(id).classList.add("show");document.body.style.overflow="hidden"
+}
+function closeSheets(){
+  document.querySelectorAll(".sheet").forEach(function(s){s.classList.remove("show")});
+  el("sheetBackdrop").classList.remove("show");document.body.style.overflow=""
+}
+function openMonth(p){
+  if(!state.months[p])state.months[p]=blankMonth();
+  state.activePeriod=p;state.months[p].updatedAt=Date.now();save();renderAll();hydrateSettings();closeSheets();setTab("home");toast(periodLabel(p)+"を開きました")
+}
+
+function renderHome(){
+  var m=currentMonth();
+  el("monthButtonText").textContent=state.activePeriod?periodLabel(state.activePeriod):"年月を選択";
+  el("homeNoMonth").style.display=m?"none":"block";
+  el("homeWorkspace").style.display=m?"block":"none";
+  if(!m)return;
+
+  var q=summary(m),s=m.settings,locked=m.status==="final";
+  el("lockBanner").classList.toggle("show",locked);
+  el("statusBadge").textContent=locked?"確定済み":"編集中";
+  el("statusBadge").className=locked?"badge final":"badge";
+  el("monthLeft").textContent=yen(q.left);
+  el("monthLeftText").textContent=q.left>=0?"貯金目標を守ったまま、この月にあと使える金額です。":"貯金目標を "+yen(Math.abs(q.left))+" 超過する見込みです。";
+  el("savingForecast").textContent=yen(q.saving);
+
+  if(state.activePeriod===nowPeriod()){
+    var dm=daysMonth(),dw=daysWeek();
+    el("weekLeft").textContent=yen(q.left>0?q.left/dm*dw:q.left);
+  }else el("weekLeft").textContent="—";
+
+  el("familyCurrent").textContent=yen(q.familyTotal);
+  el("familyBudgetText").textContent="予算 "+yen(s.familyBudget);
+  el("familyRemain").textContent="残り "+yen(Number(s.familyBudget||0)-q.familyTotal);
+  el("familyProgress").style.width=Math.min(100,Math.max(0,q.familyTotal/Math.max(1,Number(s.familyBudget||0))*100))+"%";
+
+  el("paypayCurrent").textContent=yen(q.paypay);
+  el("paypayBudgetText").textContent="予算 "+yen(s.paypayBudget);
+  el("paypayRemain").textContent="残り "+yen(Number(s.paypayBudget||0)-q.paypay);
+  el("paypayProgress").style.width=Math.min(100,Math.max(0,q.paypay/Math.max(1,Number(s.paypayBudget||0))*100))+"%";
+
+  document.querySelectorAll(".syncbtn[data-sync]").forEach(function(b){b.disabled=locked});
+  el("quickAddBtn").disabled=locked;
+
+  el("fixedTotal").textContent=yen(q.fixed);el("familyMine").textContent=yen(q.familyMine);el("paypayMine").textContent=yen(q.paypay);
+  el("otherMine").textContent=yen(q.other);el("expenseTotal").textContent=yen(q.expense);
+
+  renderRecent()
+}
+function renderRecent(){
+  var m=currentMonth(),box=el("recentTx");box.innerHTML="";
+  if(!m||!m.entries.length){box.innerHTML='<div class="empty">まだ手入力の支出はありません。</div>';return}
+  m.entries.slice().sort(function(a,b){return b.at-a.at}).slice(0,5).forEach(function(e){
+    var d=new Date(e.at),row=document.createElement("div");row.className="transaction";
+    row.innerHTML='<div class="txLeft"><div class="txTitle">'+esc(e.memo||categoryLabel(e.category))+'</div><div class="txMeta">'+(e.card==="family"?"家族カード":"PayPay")+' · '+(d.getMonth()+1)+'/'+d.getDate()+'</div></div><div class="txAmount">'+yen(e.amount)+'</div>';
     box.appendChild(row)
   })
 }
-function renderMonthList(){
-  var box=el("monthList"),keys=Object.keys(state.months).sort().reverse(),total=0,rate=0,count=0;box.innerHTML="";
-  keys.forEach(function(p){var q=summary(state.months[p]);if(Number(state.months[p].settings.salary||0)>0){total+=q.saving;rate+=q.rate;count++}});
-  el("totalSavings").textContent=yen(total);el("avgSavings").textContent=yen(count?total/count:0);el("avgRate").textContent=count?pct(rate/count):"0%";
-  if(!keys.length){box.innerHTML='<div class="empty">まだ月が作成されていません。</div>';return}
+function categoryLabel(c){return{free:"自由支出",transport:"交通費",food:"食費・日用品",other:"その他"}[c]||"支出"}
+function renderHistory(){
+  var keys=Object.keys(state.months).sort().reverse(),total=0,rate=0,count=0;
+  keys.forEach(function(p){var m=state.months[p],q=summary(m);if(m.status==="final"&&Number(m.settings.salary||0)>0){total+=q.saving;rate+=q.rate;count++}});
+  el("histTotal").textContent=yen(total);el("histAvg").textContent=yen(count?total/count:0);el("histRate").textContent=count?pct(rate/count):"0%";
+  var box=el("historyList");box.innerHTML="";
+  if(!keys.length){box.innerHTML='<div class="card empty">まだ月がありません。「新しい月を作る」から始められます。</div>';return}
   keys.forEach(function(p){
-    var m=state.months[p],q=summary(m),w=document.createElement("div");w.className="archive";
-    w.innerHTML='<div class="archive-head"><div><div class="archive-title">'+periodLabel(p)+' <span class="'+(m.status==="final"?"badge":"badge draft")+'">'+(m.status==="final"?"確定済み":"編集中")+'</span></div><div class="small">'+esc(m.memo||"")+'</div></div><button type="button" class="secondary smallbtn">開く</button></div>'+
-    '<div class="archive-main"><div class="archive-stat"><div class="label">手取り</div><strong>'+yen(m.settings.salary)+'</strong></div><div class="archive-stat"><div class="label">支出</div><strong>'+yen(q.expense)+'</strong></div><div class="archive-stat"><div class="label">貯金</div><strong>'+yen(q.saving)+'</strong></div></div>';
-    w.querySelector("button").onclick=function(){var a=p.split("-");el("workYear").value=Number(a[0]);el("workMonth").value=Number(a[1]);openPeriod(p);window.scrollTo({top:0,behavior:"smooth"})};
-    box.appendChild(w)
+    var m=state.months[p],q=summary(m),c=document.createElement("div");c.className="monthCard";
+    c.innerHTML='<div class="monthHead"><div><div class="monthName">'+periodLabel(p)+'</div><span class="'+(m.status==="final"?"badge final":"badge")+'">'+(m.status==="final"?"確定済み":"編集中")+'</span></div><button class="openbtn">詳細</button></div>'+
+      '<div class="monthNums"><div><div class="k">手取り</div><div class="v">'+yen(m.settings.salary)+'</div></div><div><div class="k">支出</div><div class="v">'+yen(q.expense)+'</div></div><div><div class="k">貯金</div><div class="v">'+yen(q.saving)+'</div></div></div>';
+    c.querySelector(".openbtn").onclick=function(){openDetail(p)};
+    box.appendChild(c)
   })
 }
-function renderAll(){hydrateWorkspace();renderWorkspace();renderMonthList()}
-function syncCard(card,input){
-  var m=currentMonth(),amount=parseFloat(el(input).value);
-  if(isNaN(amount)||amount<0){toast("現在利用額を入力してください");return}
-  pullSettings();m.sync[card]={amount:amount,at:Date.now()};m.updatedAt=Date.now();el(input).value="";save();renderAll();toast(card==="family"?"家族カードを反映しました":"PayPayを反映しました")
+function hydrateSettings(){
+  var m=currentMonth();
+  el("settingsNoMonth").style.display=m?"none":"block";el("settingsWorkspace").style.display=m?"block":"none";
+  if(m){
+    var s=m.settings;
+    el("mSalary").value=s.salary||"";el("mSavingTarget").value=s.savingTarget||"";el("mMortgage").value=s.mortgage||"";
+    el("mFixedOther").value=s.fixedOther||"";el("mFamilyShare").value=s.familyShare||0.6667;el("mFamilyBudget").value=s.familyBudget||"";
+    el("mPaypayBudget").value=s.paypayBudget||"";el("mOtherExpense").value=m.otherExpense||"";el("mMemo").value=m.memo||"";
+    el("finalizeBtn").style.display=m.status==="final"?"none":"block";el("reopenBtn").style.display=m.status==="final"?"block":"none";
+    el("finalHelp").textContent=m.status==="final"?"この月は確定済みです。編集する場合は編集を再開してください。":"月末に確定すると、誤操作を防ぐため編集をロックします。";
+  }
+  var d=state.defaults;
+  el("dSalary").value=d.salary||"";el("dSavingTarget").value=d.savingTarget||"";el("dMortgage").value=d.mortgage||"";
+  el("dFixedOther").value=d.fixedOther||"";el("dFamilyShare").value=d.familyShare||0.6667;el("dFamilyBudget").value=d.familyBudget||"";
+  el("dPaypayBudget").value=d.paypayBudget||""
 }
-function bind(){
-  el("openMonth").onclick=function(){var p=pickerPeriod();if(!p){toast("年と月を指定してください");return}openPeriod(p)};
-  el("saveSettings").onclick=function(){pullSettings();save();renderAll();toast("この月の設定を保存しました")};
-  el("syncFamily").onclick=function(){syncCard("family","familySnapshot")};
-  el("syncPaypay").onclick=function(){syncCard("paypay","paypaySnapshot")};
-  el("addEntry").onclick=function(){
-    var m=currentMonth(),amount=parseFloat(el("entryAmount").value);if(isNaN(amount)||amount<=0){toast("使った金額を入力してください");return}
-    pullSettings();m.entries.push({id:String(Date.now())+"_"+String(Math.random()).slice(2),at:Date.now(),card:el("entryCard").value,category:el("entryCategory").value,amount:amount,memo:el("entryMemo").value});
-    m.updatedAt=Date.now();el("entryAmount").value="";el("entryMemo").value="";save();renderAll();toast(yen(amount)+" を追加しました")
-  };
-  el("saveExtra").onclick=function(){var m=currentMonth();m.otherExpense=n("otherExpense");m.memo=el("monthMemo").value;m.updatedAt=Date.now();save();renderAll();toast("追加情報を保存しました")};
-  el("finalizeMonth").onclick=function(){
-    var m=currentMonth();pullSettings();m.otherExpense=n("otherExpense");m.memo=el("monthMemo").value;
-    if(Number(m.settings.salary||0)<=0){toast("手取り給与を入力してください");return}
-    m.status="final";m.updatedAt=Date.now();save();renderAll();toast(periodLabel(state.activePeriod)+"を確定しました")
-  };
-  el("reopenMonth").onclick=function(){var m=currentMonth();m.status="draft";m.updatedAt=Date.now();save();renderAll();toast("確定を解除しました")};
-  el("clearHistory").onclick=function(){var m=currentMonth();if(confirm(periodLabel(state.activePeriod)+"の手入力履歴を削除しますか？")){m.entries=[];m.updatedAt=Date.now();save();renderAll();toast("履歴を削除しました")}};
-  el("testButton").onclick=function(){toast("ボタンは正常に動いています");el("appStatus").textContent="✓ ボタン動作確認済み"};
-  el("exportBackup").onclick=function(){
-    var blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"}),name="kakei-backup.json";
-    try{var file=new File([blob],name,{type:"application/json"});if(navigator.canShare&&navigator.canShare({files:[file]})){navigator.share({files:[file],title:"家計管理バックアップ"}).catch(function(){});return}}catch(e){}
-    var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},500)
-  };
-  el("importBackup").onclick=function(){el("backupFile").click()};
-  el("backupFile").onchange=function(){
-    var f=this.files&&this.files[0];if(!f)return;var r=new FileReader();
-    r.onload=function(){try{var x=JSON.parse(r.result);if(!x||!x.months)throw new Error();if(confirm("現在のデータをバックアップ内容で置き換えますか？")){state=x;save();renderAll();toast("復元しました")}}catch(e){alert("家計アプリのバックアップとして読み込めませんでした")}};
-    r.readAsText(f);this.value=""
+function renderAll(){renderHome();renderHistory();hydrateSettings();renderMonthGrid()}
+
+function openAdd(){
+  if(!currentMonth()){openMonthPicker();return}
+  if(isLocked()){toast("確定済みです。設定から編集を再開してください");return}
+  el("addAmount").value="";el("addMemo").value="";ui.addCard="paypay";ui.addCat="free";
+  syncAddUI();openSheet("addSheet");setTimeout(function(){el("addAmount").focus()},280)
+}
+function syncAddUI(){
+  document.querySelectorAll("[data-addcard]").forEach(function(b){b.classList.toggle("active",b.dataset.addcard===ui.addCard)});
+  document.querySelectorAll("[data-cat]").forEach(function(b){b.classList.toggle("active",b.dataset.cat===ui.addCat)})
+}
+function saveEntry(){
+  var m=currentMonth(),amount=parseFloat(el("addAmount").value);
+  if(!m||isLocked())return;if(isNaN(amount)||amount<=0){toast("金額を入力してください");return}
+  m.entries.push({id:String(Date.now())+"_"+String(Math.random()).slice(2),at:Date.now(),card:ui.addCard,category:ui.addCat,amount:amount,memo:el("addMemo").value.trim()});
+  m.updatedAt=Date.now();save();renderAll();closeSheets();toast(yen(amount)+" を追加しました")
+}
+function openSync(card){
+  if(!currentMonth()||isLocked())return;
+  ui.syncCard=card;var m=currentMonth(),cur=cardCurrent(m,card),last=(m.sync[card]&&m.sync[card].at)||0;
+  el("syncTitle").textContent=(card==="family"?"家族カード":"PayPay")+"を同期";
+  el("syncInfo").innerHTML="アプリ上の現在額：<strong>"+yen(cur)+"</strong><br>最終同期："+(last?new Date(last).toLocaleString("ja-JP"):"未同期")+"<br><span style='color:var(--muted)'>カード画面の現在利用額を正として、この時点までの手入力を取り込みます。</span>";
+  el("syncAmount").value="";openSheet("syncSheet");setTimeout(function(){el("syncAmount").focus()},280)
+}
+function saveSync(){
+  var m=currentMonth(),card=ui.syncCard,amount=parseFloat(el("syncAmount").value);if(!m||!card||isLocked())return;
+  if(isNaN(amount)||amount<0){toast("現在利用額を入力してください");return}
+  var before=cardCurrent(m,card),diff=amount-before;m.sync[card]={amount:amount,at:Date.now()};m.updatedAt=Date.now();save();renderAll();closeSheets();
+  toast("同期しました（差額 "+(diff>=0?"+":"")+yen(diff).replace("¥","¥")+"）")
+}
+function renderAllTx(){
+  var m=currentMonth(),box=el("allTx");box.innerHTML="";
+  if(!m||!m.entries.length){box.innerHTML='<div class="empty">手入力の支出はありません。</div>';return}
+  m.entries.slice().sort(function(a,b){return b.at-a.at}).forEach(function(e){
+    var d=new Date(e.at),row=document.createElement("div");row.className="transaction";
+    row.innerHTML='<div class="txLeft"><div class="txTitle">'+esc(e.memo||categoryLabel(e.category))+'</div><div class="txMeta">'+(e.card==="family"?"家族カード":"PayPay")+' · '+d.toLocaleString("ja-JP")+'</div></div><div style="display:flex;align-items:center;gap:8px"><div class="txAmount">'+yen(e.amount)+'</div><button class="openbtn deleteTx">削除</button></div>';
+    row.querySelector(".deleteTx").onclick=function(){if(isLocked()){toast("確定済みです");return}m.entries=m.entries.filter(function(x){return x.id!==e.id});save();renderAll();renderAllTx();toast("削除しました")};
+    box.appendChild(row)
+  })
+}
+
+function openMonthPicker(){
+  ui.pickerYear=parseInt((state.activePeriod||nowPeriod()).split("-")[0],10)||new Date().getFullYear();
+  el("pickerYear").value=ui.pickerYear;renderMonthGrid();openSheet("monthSheet")
+}
+function renderMonthGrid(){
+  var box=el("monthGrid");if(!box)return;box.innerHTML="";var y=parseInt(el("pickerYear").value||ui.pickerYear,10);if(!y)return;
+  ui.pickerYear=y;
+  for(var mo=1;mo<=12;mo++){
+    (function(month){
+      var p=String(y)+"-"+String(month).padStart(2,"0"),m=state.months[p],b=document.createElement("button");
+      b.className="monthTile"+(m?" exists":"")+(p===state.activePeriod?" current":"")+(m&&m.status==="final"?" final":"");
+      b.textContent=month+"月";
+      b.onclick=function(){openMonth(p)}
+      box.appendChild(b)
+    })(mo)
   }
 }
-fillPicker();load();bind();
-if(state.activePeriod&&state.months[state.activePeriod]){
-  var a=state.activePeriod.split("-");el("workYear").value=Number(a[0]);el("workMonth").value=Number(a[1]);renderAll()
-}else{
-  el("workspace").style.display="none";renderMonthList()
+function openDetail(p){
+  ui.detailPeriod=p;var m=state.months[p],q=summary(m);if(!m)return;
+  el("detailTitle").textContent=periodLabel(p);
+  el("detailBody").innerHTML=
+    '<div class="detailGrid">'+
+    '<div class="detailCell"><div class="k">手取り</div><div class="v">'+yen(m.settings.salary)+'</div></div>'+
+    '<div class="detailCell"><div class="k">総支出</div><div class="v">'+yen(q.expense)+'</div></div>'+
+    '<div class="detailCell"><div class="k">貯金</div><div class="v">'+yen(q.saving)+'</div></div>'+
+    '<div class="detailCell"><div class="k">貯蓄率</div><div class="v">'+pct(q.rate)+'</div></div>'+
+    '<div class="detailCell"><div class="k">家族カード</div><div class="v">'+yen(q.familyTotal)+'</div></div>'+
+    '<div class="detailCell"><div class="k">PayPay</div><div class="v">'+yen(q.paypay)+'</div></div>'+
+    '</div>'+
+    '<div class="syncInfo">固定費：'+yen(q.fixed)+'<br>家族カード自分負担：'+yen(q.familyMine)+'<br>その他支出：'+yen(q.other)+'<br>貯金目標との差：'+yen(q.gap)+'</div>'+
+    (m.memo?'<div class="syncInfo">メモ：'+esc(m.memo)+'</div>':"");
+  openSheet("detailSheet")
 }
-el("appStatus").textContent="✓ アプリ読み込み完了";
+
+function saveMonthSettings(){
+  var m=currentMonth();if(!m)return;if(isLocked()){toast("確定済みです。先に編集を再開してください");return}
+  m.settings.salary=val("mSalary");m.settings.savingTarget=val("mSavingTarget");m.settings.mortgage=val("mMortgage");
+  m.settings.fixedOther=val("mFixedOther");m.settings.familyShare=val("mFamilyShare");m.settings.familyBudget=val("mFamilyBudget");
+  m.settings.paypayBudget=val("mPaypayBudget");m.otherExpense=val("mOtherExpense");m.memo=el("mMemo").value;m.updatedAt=Date.now();
+  save();renderAll();toast("この月の設定を保存しました")
+}
+function saveDefaults(){
+  state.defaults.salary=val("dSalary");state.defaults.savingTarget=val("dSavingTarget");state.defaults.mortgage=val("dMortgage");
+  state.defaults.fixedOther=val("dFixedOther");state.defaults.familyShare=val("dFamilyShare");state.defaults.familyBudget=val("dFamilyBudget");
+  state.defaults.paypayBudget=val("dPaypayBudget");save();toast("新しい月の初期値を保存しました")
+}
+function finalizeMonth(){
+  var m=currentMonth();if(!m)return;if(Number(m.settings.salary||0)<=0){toast("手取り給与を設定してください");return}
+  m.status="final";m.updatedAt=Date.now();save();renderAll();toast(periodLabel(state.activePeriod)+"を確定しました")
+}
+function reopenMonth(){
+  var m=currentMonth();if(!m)return;m.status="draft";m.updatedAt=Date.now();save();renderAll();toast("編集を再開しました")
+}
+function exportBackup(){
+  var blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"}),name="kakei-backup-"+(state.activePeriod||nowPeriod())+".json";
+  try{
+    var file=new File([blob],name,{type:"application/json"});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){navigator.share({files:[file],title:"家計管理バックアップ"}).catch(function(){});return}
+  }catch(e){}
+  var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},500)
+}
+function importBackupFile(file){
+  var r=new FileReader();r.onload=function(){
+    try{
+      var x=JSON.parse(r.result);if(!x||!x.months)throw new Error();
+      if(confirm("現在のデータをバックアップ内容で置き換えますか？")){state=x;normalize();save();renderAll();toast("復元しました")}
+    }catch(e){alert("家計アプリのバックアップとして読み込めませんでした")}
+  };r.readAsText(file)
+}
+
+function bind(){
+  document.querySelectorAll(".navbtn").forEach(function(b){b.onclick=function(){setTab(b.dataset.tab)}});
+  el("monthButton").onclick=openMonthPicker;el("chooseMonthFromHome").onclick=openMonthPicker;el("chooseMonthFromSettings").onclick=openMonthPicker;
+  el("createMonthBtn").onclick=openMonthPicker;
+  el("quickAddBtn").onclick=openAdd;
+  document.querySelectorAll(".syncbtn[data-sync]").forEach(function(b){b.onclick=function(){openSync(b.dataset.sync)}});
+  el("showAllTx").onclick=function(){renderAllTx();openSheet("txSheet")};
+  el("sheetBackdrop").onclick=closeSheets;
+
+  document.querySelectorAll("[data-addcard]").forEach(function(b){b.onclick=function(){ui.addCard=b.dataset.addcard;syncAddUI()}});
+  document.querySelectorAll("[data-cat]").forEach(function(b){b.onclick=function(){ui.addCat=b.dataset.cat;syncAddUI()}});
+  el("saveEntryBtn").onclick=saveEntry;el("saveSyncBtn").onclick=saveSync;
+
+  el("prevYear").onclick=function(){ui.pickerYear--;el("pickerYear").value=ui.pickerYear;renderMonthGrid()};
+  el("nextYear").onclick=function(){ui.pickerYear++;el("pickerYear").value=ui.pickerYear;renderMonthGrid()};
+  el("pickerYear").oninput=renderMonthGrid;
+
+  el("openDetailMonth").onclick=function(){if(ui.detailPeriod)openMonth(ui.detailPeriod)};
+  el("saveMonthSettings").onclick=saveMonthSettings;el("saveDefaults").onclick=saveDefaults;
+  el("finalizeBtn").onclick=finalizeMonth;el("reopenBtn").onclick=reopenMonth;
+  el("exportBackup").onclick=exportBackup;el("importBackup").onclick=function(){el("backupFile").click()};
+  el("backupFile").onchange=function(){var f=this.files&&this.files[0];if(f)importBackupFile(f);this.value=""};
+}
+
+load();bind();renderAll();setTab("home");
 })();
 </script>
 <script>
-if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("./sw.js").catch(function(){})})}
+if("serviceWorker" in navigator){
+  window.addEventListener("load",function(){navigator.serviceWorker.register("./sw.js").catch(function(){})})
+}
 </script>
 </body>
 </html>

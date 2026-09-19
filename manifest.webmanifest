@@ -1,12 +1,12 @@
 {
-  "name": "家計コントローラー",
+  "name": "家計管理",
   "short_name": "家計管理",
-  "description": "年月ごとに家計を管理する個人用PWA",
+  "description": "カード利用と月次の収支を管理する個人用家計アプリ",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#f5f6f8",
-  "theme_color": "#111827",
+  "background_color": "#f7f7f8",
+  "theme_color": "#f7f7f8",
   "icons": [
     {
       "src": "./icon-192.png",
