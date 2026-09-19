@@ -1,7 +1,7 @@
 {
   "name": "家計コントローラー",
   "short_name": "家計管理",
-  "description": "カード利用額と月次収支を管理する家計アプリ",
+  "description": "今月のカード利用と任意年月の家計記録を管理するアプリ",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
