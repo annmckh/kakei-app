@@ -1,7 +1,7 @@
 {
   "name": "家計コントローラー",
   "short_name": "家計管理",
-  "description": "カード利用額と支出を管理し、今月・今週あといくら使えるか確認する家計アプリ",
+  "description": "カード利用額と月次収支を管理する家計アプリ",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
