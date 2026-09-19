@@ -11,19 +11,19 @@
 <link rel="apple-touch-icon" href="./icon-192.png">
 <title>家計コントローラー</title>
 <style>
-:root{--bg:#f5f6f8;--card:#fff;--text:#111827;--muted:#6b7280;--line:#e5e7eb;--good:#0f766e;--warn:#b45309;--bad:#b91c1c;--accent:#111827;--soft:#f3f4f6}
+:root{--bg:#f5f6f8;--card:#fff;--text:#111827;--muted:#6b7280;--line:#e5e7eb;--good:#0f766e;--warn:#b45309;--bad:#b91c1c;--accent:#111827}
 *{box-sizing:border-box}html,body{min-height:100%}
 body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
-.wrap{max-width:800px;margin:0 auto;padding:18px 14px 56px}
+.wrap{max-width:820px;margin:0 auto;padding:18px 14px 56px}
 h1{font-size:26px;margin:2px 0 4px}.sub{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:14px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px;box-shadow:0 2px 10px rgba(0,0,0,.03)}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:650px){.grid{grid-template-columns:1fr}}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}@media(max-width:650px){.grid3{grid-template-columns:1fr 1fr 1fr}}
-.label{font-size:12px;color:var(--muted);margin-bottom:5px}.big{font-size:30px;font-weight:800;letter-spacing:-.7px}.stat{font-size:21px;font-weight:800}
+.label{font-size:12px;color:var(--muted);margin-bottom:5px}.big{font-size:30px;font-weight:800;letter-spacing:-.7px}.stat{font-size:20px;font-weight:800}
 h2{font-size:16px;margin:0 0 10px}
 .row{display:grid;grid-template-columns:1fr 145px;gap:10px;align-items:center;margin:10px 0}@media(max-width:650px){.row{grid-template-columns:1fr 130px}}
 input,select,textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:12px;font-size:16px;background:#fff;color:var(--text)}
-input[type=number]{text-align:right}textarea{min-height:82px;resize:vertical}
+input[type=number]{text-align:right}textarea{min-height:80px;resize:vertical}
 button{width:100%;padding:12px 14px;border:0;border-radius:12px;background:var(--accent);color:#fff;font-size:15px;font-weight:750;margin-top:8px}
 button.secondary{background:#eef1f5;color:#111827;border:1px solid var(--line)}button.danger{background:#fff;color:var(--bad);border:1px solid #fecaca}
 button.smallbtn{width:auto;margin:0;padding:7px 10px;font-size:12px;border-radius:10px}
@@ -35,140 +35,115 @@ button.smallbtn{width:auto;margin:0;padding:7px 10px;font-size:12px;border-radiu
 .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:#111827;color:#fff;padding:11px 14px;border-radius:12px;font-size:13px;opacity:0;pointer-events:none;transition:.2s;z-index:9999;white-space:nowrap}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .test{font-size:12px;padding:9px 10px;border-radius:10px;background:#eef7f4;color:#0f766e;margin-bottom:12px}
 .actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.period-picker{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
-.record-head{background:#f9fafb;border:1px solid var(--line);border-radius:14px;padding:13px;margin-bottom:12px}
-.record-status{display:flex;justify-content:space-between;align-items:center;gap:10px}.badge{font-size:11px;padding:5px 9px;border-radius:999px;background:#ecfdf5;color:var(--good);font-weight:700}.badge.new{background:#f3f4f6;color:var(--muted)}
+.period-picker{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.period-banner{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#fafafa;border:1px solid var(--line);border-radius:14px;padding:13px;margin-top:12px}
+.badge{font-size:11px;padding:5px 9px;border-radius:999px;background:#ecfdf5;color:var(--good);font-weight:700}.badge.draft{background:#fff7ed;color:var(--warn)}
 .archive{border:1px solid var(--line);border-radius:14px;margin:10px 0;overflow:hidden}.archive-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:13px;background:#fafafa}.archive-title{font-weight:800}.archive-main{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px}.archive-stat .label{font-size:10px}.archive-stat strong{font-size:14px}
-.history-entry{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:12px}.empty{padding:10px 0;color:var(--muted);font-size:12px}
-.sep{height:1px;background:var(--line);margin:14px 0}.editor-disabled{opacity:.45;pointer-events:none;filter:grayscale(.15)}
+.empty{padding:10px 0;color:var(--muted);font-size:12px}.sep{height:1px;background:var(--line);margin:14px 0}
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1>家計コントローラー</h1>
-  <div class="sub">今月の支出管理と、任意の年月の月次記録を1つのアプリで管理します。データはこのiPhone内に保存されます。</div>
+  <div class="sub">年月ごとに完全に独立して管理します。選んだ年月の「上の入力内容」そのものが、その月の記録になります。</div>
   <div class="test" id="appStatus">アプリを読み込み中…</div>
 
-  <div class="grid">
-    <div class="card"><div class="label">今月あと使える</div><div class="big" id="monthLeft">¥0</div><div class="status" id="monthStatus">設定を入力してください</div></div>
-    <div class="card"><div class="label">今週あと使える目安</div><div class="big" id="weekLeft">¥0</div><div class="small" id="weekHint"></div></div>
-  </div>
-
   <div class="card">
-    <h2>今月の設定</h2>
-    <div class="row"><span>手取り給与</span><input id="salary" type="number" inputmode="numeric" placeholder="例 600000"></div>
-    <div class="row"><span>貯金目標</span><input id="savingTarget" type="number" inputmode="numeric" placeholder="例 300000"></div>
-    <div class="row"><span>住宅ローン</span><input id="mortgage" type="number" inputmode="numeric" placeholder="例 136000"></div>
-    <div class="row"><span>ジム＋奨学金＋iDeCo</span><input id="fixedOther" type="number" inputmode="numeric" placeholder="例 23000"></div>
-    <div class="row"><span>家族カード負担率</span><input id="familyShare" type="number" inputmode="decimal" step="0.0001" value="0.6667"></div>
-    <button type="button" id="saveSettings">設定を反映・保存</button>
-  </div>
-
-  <div class="grid">
-    <div class="card">
-      <h2>家族カード</h2>
-      <div class="row"><span>月予算（総額）</span><input id="familyBudget" type="number" inputmode="numeric" placeholder="例 80000"></div>
-      <div class="sync"><div class="small">カード画面の現在利用額</div><input id="familySnapshot" type="number" inputmode="numeric" placeholder="例 52340"><button type="button" id="syncFamily">現在利用額を同期</button><div class="small" id="familySyncInfo">未同期</div></div>
-      <div class="summary"><span>推定現在利用額</span><strong id="familyCurrent">¥0</strong></div>
-      <div class="summary"><span>予算まで残り</span><strong id="familyRemain">¥0</strong></div>
-    </div>
-    <div class="card">
-      <h2>PayPayカード</h2>
-      <div class="row"><span>月予算</span><input id="paypayBudget" type="number" inputmode="numeric" placeholder="例 80000"></div>
-      <div class="sync"><div class="small">カード画面の現在利用額</div><input id="paypaySnapshot" type="number" inputmode="numeric" placeholder="例 46120"><button type="button" id="syncPaypay">現在利用額を同期</button><div class="small" id="paypaySyncInfo">未同期</div></div>
-      <div class="summary"><span>推定現在利用額</span><strong id="paypayCurrent">¥0</strong></div>
-      <div class="summary"><span>予算まで残り</span><strong id="paypayRemain">¥0</strong></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>今使った額を追加</h2>
-    <div class="row"><span>カード</span><select id="entryCard"><option value="paypay">PayPay</option><option value="family">家族カード</option></select></div>
-    <div class="row"><span>カテゴリ</span><select id="entryCategory"><option value="free">自由支出</option><option value="transport">交通費</option><option value="food">食費・日用品</option><option value="other">その他</option></select></div>
-    <div class="row"><span>金額</span><input id="entryAmount" type="number" inputmode="numeric" placeholder="例 1280"></div>
-    <input id="entryMemo" type="text" placeholder="メモ（例：ランチ、Amazon、スーパー）">
-    <button type="button" id="addEntry">支出を追加</button>
-    <div class="small">再同期すると、それ以前の手入力分は二重計上しません。</div>
-  </div>
-
-  <div class="card">
-    <h2>今月の見込み</h2>
-    <div class="summary"><span>固定費</span><strong id="fixedTotal">¥0</strong></div>
-    <div class="summary"><span>家族カード自分負担</span><strong id="familyMine">¥0</strong></div>
-    <div class="summary"><span>PayPay利用額</span><strong id="paypayMine">¥0</strong></div>
-    <div class="summary"><span>今月の支出見込み</span><strong id="expenseForecast">¥0</strong></div>
-    <div class="summary"><span>今月の貯金見込み</span><strong id="savingForecast">¥0</strong></div>
-    <div class="summary"><span>貯金目標との差</span><strong id="savingGap">¥0</strong></div>
-  </div>
-
-  <div class="card">
-    <h2>支出履歴</h2>
-    <div id="entries"><div class="empty">まだ支出履歴はありません。</div></div>
-  </div>
-
-  <div class="card" id="monthlyRecordCard">
-    <h2>月次記録</h2>
-    <div class="small" style="margin-bottom:10px">過去・未来を問わず、まだ作っていない年月も自由に新規作成できます。年と月を指定して「この年月を新規作成／開く」を押してください。</div>
-
+    <h2>管理する年月</h2>
     <div class="period-picker">
-      <input id="recordYear" type="number" inputmode="numeric" placeholder="例 2027" aria-label="年">
-      <select id="recordMonth" aria-label="月"></select>
+      <input id="workYear" type="number" inputmode="numeric" placeholder="例 2027">
+      <select id="workMonth"></select>
     </div>
-    <button type="button" id="openRecordPeriod">この年月を新規作成／開く</button>
-    <div class="small" style="margin-top:7px">保存済みなら内容を開き、まだ存在しない年月なら新しい記録として作成できます。過去・未来どちらも自由に指定できます。</div>
+    <button type="button" id="openMonth">この年月を新規作成／開く</button>
+    <div class="small" style="margin-top:7px">過去・未来・まだ作っていない月も自由に作れます。保存済みならその月の内容を読み込みます。</div>
+    <div class="period-banner">
+      <div>
+        <div class="label">現在開いている月</div>
+        <strong id="activePeriodLabel">未選択</strong>
+      </div>
+      <span id="monthStatusBadge" class="badge draft">未選択</span>
+    </div>
+  </div>
 
-    <div class="record-head" style="margin-top:12px">
-      <div class="record-status">
-        <div>
-          <strong id="recordPeriodLabel">年月を選択</strong>
-          <div class="small" id="recordSavedInfo">新規記録</div>
-        </div>
-        <span class="badge new" id="recordBadge">未保存</span>
+  <div id="workspace" style="display:none">
+    <div class="grid">
+      <div class="card"><div class="label" id="monthLeftLabel">この月あと使える</div><div class="big" id="monthLeft">¥0</div><div class="status" id="monthStatus"></div></div>
+      <div class="card"><div class="label">今週あと使える目安</div><div class="big" id="weekLeft">—</div><div class="small" id="weekHint"></div></div>
+    </div>
+
+    <div class="card">
+      <h2>この月の設定</h2>
+      <div class="row"><span>手取り給与</span><input id="salary" type="number" inputmode="numeric" placeholder="例 600000"></div>
+      <div class="row"><span>貯金目標</span><input id="savingTarget" type="number" inputmode="numeric" placeholder="例 300000"></div>
+      <div class="row"><span>住宅ローン</span><input id="mortgage" type="number" inputmode="numeric" placeholder="例 136000"></div>
+      <div class="row"><span>ジム＋奨学金＋iDeCo</span><input id="fixedOther" type="number" inputmode="numeric" placeholder="例 23000"></div>
+      <div class="row"><span>家族カード負担率</span><input id="familyShare" type="number" inputmode="decimal" step="0.0001" value="0.6667"></div>
+      <div class="row"><span>家族カード月予算</span><input id="familyBudget" type="number" inputmode="numeric" placeholder="例 80000"></div>
+      <div class="row"><span>PayPay月予算</span><input id="paypayBudget" type="number" inputmode="numeric" placeholder="例 80000"></div>
+      <button type="button" id="saveSettings">設定を保存</button>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>家族カード</h2>
+        <div class="sync"><div class="small">カード画面の現在利用額</div><input id="familySnapshot" type="number" inputmode="numeric" placeholder="例 52340"><button type="button" id="syncFamily">現在利用額を同期</button><div class="small" id="familySyncInfo">未同期</div></div>
+        <div class="summary"><span>推定現在利用額</span><strong id="familyCurrent">¥0</strong></div>
+        <div class="summary"><span>予算まで残り</span><strong id="familyRemain">¥0</strong></div>
+      </div>
+      <div class="card">
+        <h2>PayPayカード</h2>
+        <div class="sync"><div class="small">カード画面の現在利用額</div><input id="paypaySnapshot" type="number" inputmode="numeric" placeholder="例 46120"><button type="button" id="syncPaypay">現在利用額を同期</button><div class="small" id="paypaySyncInfo">未同期</div></div>
+        <div class="summary"><span>推定現在利用額</span><strong id="paypayCurrent">¥0</strong></div>
+        <div class="summary"><span>予算まで残り</span><strong id="paypayRemain">¥0</strong></div>
       </div>
     </div>
 
-    <div id="recordEditor" class="editor-disabled">
-    <div class="actions">
-      <button type="button" class="secondary" id="copyCurrentToRecord">現在の管理中データをコピー</button>
-      <button type="button" class="secondary" id="clearRecordForm">入力欄をクリア</button>
+    <div class="card">
+      <h2>使った額を追加</h2>
+      <div class="row"><span>カード</span><select id="entryCard"><option value="paypay">PayPay</option><option value="family">家族カード</option></select></div>
+      <div class="row"><span>カテゴリ</span><select id="entryCategory"><option value="free">自由支出</option><option value="transport">交通費</option><option value="food">食費・日用品</option><option value="other">その他</option></select></div>
+      <div class="row"><span>金額</span><input id="entryAmount" type="number" inputmode="numeric" placeholder="例 1280"></div>
+      <input id="entryMemo" type="text" placeholder="メモ（例：ランチ、Amazon、スーパー）">
+      <button type="button" id="addEntry">支出を追加</button>
     </div>
 
-    <div class="sep"></div>
+    <div class="card">
+      <h2>この月の追加情報</h2>
+      <div class="row"><span>その他支出（現金など）</span><input id="otherExpense" type="number" inputmode="numeric" placeholder="なければ0"></div>
+      <div class="small" style="margin:8px 0 5px">月メモ</div>
+      <textarea id="monthMemo" placeholder="例：旅行あり、家具購入あり、カード請求確定済み"></textarea>
+      <button type="button" id="saveExtra">追加情報を保存</button>
+    </div>
 
-    <div class="row"><span>手取り給与</span><input id="recordSalary" type="number" inputmode="numeric" placeholder="例 600000"></div>
-    <div class="row"><span>貯金目標</span><input id="recordSavingTarget" type="number" inputmode="numeric" placeholder="例 300000"></div>
-    <div class="row"><span>住宅ローン</span><input id="recordMortgage" type="number" inputmode="numeric" placeholder="例 136000"></div>
-    <div class="row"><span>ジム＋奨学金＋iDeCo</span><input id="recordFixedOther" type="number" inputmode="numeric" placeholder="例 23000"></div>
-    <div class="row"><span>家族カード総額</span><input id="recordFamilyTotal" type="number" inputmode="numeric" placeholder="例 80000"></div>
-    <div class="row"><span>家族カード負担率</span><input id="recordFamilyShare" type="number" inputmode="decimal" step="0.0001" value="0.6667"></div>
-    <div class="row"><span>PayPay利用額</span><input id="recordPaypay" type="number" inputmode="numeric" placeholder="例 80000"></div>
-    <div class="row"><span>その他支出</span><input id="recordOtherExpense" type="number" inputmode="numeric" placeholder="現金など。なければ0"></div>
-    <div class="small" style="margin:10px 0 5px">メモ</div>
-    <textarea id="recordMemo" placeholder="例：旅行があった月、家具購入あり、カード請求確定済み など"></textarea>
+    <div class="card">
+      <h2>この月の収支</h2>
+      <div class="summary"><span>固定費</span><strong id="fixedTotal">¥0</strong></div>
+      <div class="summary"><span>家族カード自分負担</span><strong id="familyMine">¥0</strong></div>
+      <div class="summary"><span>PayPay利用額</span><strong id="paypayMine">¥0</strong></div>
+      <div class="summary"><span>その他支出</span><strong id="otherMine">¥0</strong></div>
+      <div class="summary"><span>総支出</span><strong id="expenseForecast">¥0</strong></div>
+      <div class="summary"><span>貯金額</span><strong id="savingForecast">¥0</strong></div>
+      <div class="summary"><span>貯蓄率</span><strong id="savingRate">0%</strong></div>
+      <div class="summary"><span>貯金目標との差</span><strong id="savingGap">¥0</strong></div>
+      <button type="button" id="finalizeMonth">この月の収支を確定</button>
+      <button type="button" class="secondary" id="reopenMonth">確定を解除して編集する</button>
+    </div>
 
-    <div class="sep"></div>
-
-    <div class="summary"><span>固定費</span><strong id="recordFixed">¥0</strong></div>
-    <div class="summary"><span>家族カード自分負担</span><strong id="recordFamilyMine">¥0</strong></div>
-    <div class="summary"><span>総支出</span><strong id="recordExpense">¥0</strong></div>
-    <div class="summary"><span>貯金額</span><strong id="recordSaving">¥0</strong></div>
-    <div class="summary"><span>貯蓄率</span><strong id="recordSavingRate">0%</strong></div>
-    <div class="summary"><span>貯金目標との差</span><strong id="recordGap">¥0</strong></div>
-
-    <button type="button" id="saveMonthlyRecord">この年月の記録を保存</button>
-    <button type="button" class="danger" id="deleteMonthlyRecord">この年月の記録を削除</button>
+    <div class="card">
+      <h2>支出履歴</h2>
+      <div id="entries"><div class="empty">まだ支出履歴はありません。</div></div>
+      <button type="button" class="danger" id="clearHistory">この月の手入力履歴を削除</button>
     </div>
   </div>
 
   <div class="card">
-    <h2>保存済みの月</h2>
+    <h2>作成済みの月</h2>
     <div class="grid3">
       <div><div class="label">累計貯金</div><div class="stat" id="totalSavings">¥0</div></div>
       <div><div class="label">月平均の貯金</div><div class="stat" id="avgSavings">¥0</div></div>
       <div><div class="label">平均貯蓄率</div><div class="stat" id="avgRate">0%</div></div>
     </div>
-    <div id="archives"></div>
-
+    <div id="monthList"></div>
     <div class="actions" style="margin-top:12px">
       <button type="button" class="secondary" id="exportBackup">バックアップ保存</button>
       <button type="button" class="secondary" id="importBackup">バックアップ復元</button>
@@ -176,393 +151,258 @@ button.smallbtn{width:auto;margin:0;padding:7px 10px;font-size:12px;border-radiu
     <input type="file" id="backupFile" accept="application/json" style="display:none">
   </div>
 
-  <div class="card">
-    <div class="actions">
-      <button type="button" class="secondary" id="testButton">動作テスト</button>
-      <button type="button" class="danger" id="clearHistory">今月の手入力履歴を削除</button>
-    </div>
-  </div>
+  <div class="card"><button type="button" class="secondary" id="testButton">動作テスト</button></div>
 </div>
-
 <div class="toast" id="toast"></div>
 
 <script>
 (function(){
 "use strict";
-var KEY="kakei-month-selector-v2";
-var LEGACY_KEYS=["kakei-month-selector-v1","kakei-single-v1","kakei-monthly-history-v1"];
-var emptyState={
-  settings:{salary:0,savingTarget:0,mortgage:0,fixedOther:0,familyShare:0.6667,familyBudget:0,paypayBudget:0},
-  sync:{family:{amount:0,at:0},paypay:{amount:0,at:0}},
-  entries:[],
-  archives:{}
-};
-var state=JSON.parse(JSON.stringify(emptyState));
+var KEY="kakei-workspace-v1";
+var LEGACY_KEYS=["kakei-month-selector-v2","kakei-month-selector-v1","kakei-single-v1","kakei-monthly-history-v1"];
+var state={activePeriod:null,months:{}};
 
 function el(id){return document.getElementById(id)}
-function num(id){var x=parseFloat(el(id).value);return isNaN(x)?0:x}
-function yen(n){n=Math.round(Number(n)||0);return (n<0?"−":"")+"¥"+Math.abs(n).toLocaleString("ja-JP")}
-function pct(n){return ((Number(n)||0)*100).toFixed(1).replace(".0","")+"%"}
-function clone(x){return JSON.parse(JSON.stringify(x))}
-function toast(msg){var t=el("toast");t.textContent=msg;t.className="toast show";setTimeout(function(){t.className="toast"},1700)}
-function periodNow(){var d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")}
+function n(id){var x=parseFloat(el(id).value);return isNaN(x)?0:x}
+function yen(v){v=Math.round(Number(v)||0);return (v<0?"−":"")+"¥"+Math.abs(v).toLocaleString("ja-JP")}
+function pct(v){return ((Number(v)||0)*100).toFixed(1).replace(".0","")+"%"}
+function toast(msg){var t=el("toast");t.textContent=msg;t.className="toast show";setTimeout(function(){t.className="toast"},1600)}
+function nowPeriod(){var d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")}
 function periodLabel(p){var a=String(p||"").split("-");return a.length===2?Number(a[0])+"年"+Number(a[1])+"月":p}
-function categoryName(c){return{free:"自由支出",transport:"交通費",food:"食費・日用品",other:"その他"}[c]||c||""}
-function escapeHtml(s){return String(s||"").replace(/[&<>\"']/g,function(ch){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[ch]})}
-
-function save(){
-  try{localStorage.setItem(KEY,JSON.stringify(state));return true}catch(e){toast("保存できませんでした");return false}
+function esc(s){return String(s||"").replace(/[&<>\"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]})}
+function blankMonth(defaults){
+  defaults=defaults||{};
+  return {
+    status:"draft",
+    settings:{
+      salary:0,
+      savingTarget:Number(defaults.savingTarget||0),
+      mortgage:Number(defaults.mortgage||0),
+      fixedOther:Number(defaults.fixedOther||0),
+      familyShare:Number(defaults.familyShare||0.6667),
+      familyBudget:Number(defaults.familyBudget||0),
+      paypayBudget:Number(defaults.paypayBudget||0)
+    },
+    sync:{family:{amount:0,at:0},paypay:{amount:0,at:0}},
+    entries:[],
+    otherExpense:0,
+    memo:"",
+    updatedAt:Date.now()
+  }
 }
-function normalizeLoaded(x){
-  state.settings=Object.assign({},emptyState.settings,x.settings||{});
-  state.sync={
-    family:Object.assign({},emptyState.sync.family,(x.sync&&x.sync.family)||{}),
-    paypay:Object.assign({},emptyState.sync.paypay,(x.sync&&x.sync.paypay)||{})
-  };
-  state.entries=Array.isArray(x.entries)?x.entries:[];
-  state.archives=(x.archives&&typeof x.archives==="object")?x.archives:{};
-}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));return true}catch(e){toast("保存できませんでした");return false}}
 function load(){
-  var raw=null, k=null;
-  try{raw=localStorage.getItem(KEY)}catch(e){}
-  if(!raw){
-    for(var i=0;i<LEGACY_KEYS.length;i++){
-      try{raw=localStorage.getItem(LEGACY_KEYS[i]);if(raw){k=LEGACY_KEYS[i];break}}catch(e){}
+  try{
+    var raw=localStorage.getItem(KEY);
+    if(raw){state=JSON.parse(raw);if(!state.months)state.months={};return}
+  }catch(e){}
+  migrateLegacy();
+}
+function migrateLegacy(){
+  var raw=null,obj=null,key=null;
+  for(var i=0;i<LEGACY_KEYS.length;i++){
+    try{raw=localStorage.getItem(LEGACY_KEYS[i]);if(raw){key=LEGACY_KEYS[i];break}}catch(e){}
+  }
+  if(!raw)return;
+  try{obj=JSON.parse(raw)}catch(e){return}
+
+  if(obj.archives && typeof obj.archives==="object"){
+    Object.keys(obj.archives).forEach(function(p){
+      var a=obj.archives[p],s=a.settings||{},q=a.summary||{};
+      state.months[p]={
+        status:"final",
+        settings:{
+          salary:Number(s.salary||0),savingTarget:Number(s.savingTarget||0),
+          mortgage:Number(s.mortgage||0),fixedOther:Number(s.fixedOther||0),
+          familyShare:Number(s.familyShare||0.6667),familyBudget:Number(s.familyBudget||0),
+          paypayBudget:Number(s.paypayBudget||0)
+        },
+        sync:{family:{amount:Number(q.familyTotal||0),at:Date.now()},paypay:{amount:Number(q.paypay||0),at:Date.now()}},
+        entries:Array.isArray(a.entries)?a.entries:[],
+        otherExpense:Number(q.otherExpense||0),memo:a.memo||"",updatedAt:a.closedAt||Date.now()
+      };
+    });
+  }
+
+  if(obj.settings && obj.sync){
+    var p=nowPeriod();
+    if(!state.months[p]){
+      state.months[p]={
+        status:"draft",
+        settings:Object.assign(blankMonth().settings,obj.settings||{}),
+        sync:{
+          family:Object.assign({amount:0,at:0},(obj.sync&&obj.sync.family)||{}),
+          paypay:Object.assign({amount:0,at:0},(obj.sync&&obj.sync.paypay)||{})
+        },
+        entries:Array.isArray(obj.entries)?obj.entries:[],
+        otherExpense:0,memo:"",updatedAt:Date.now()
+      };
     }
+    state.activePeriod=p;
   }
-  if(raw){
-    try{normalizeLoaded(JSON.parse(raw));save()}catch(e){}
-  }
+  save();
 }
-function hydrateCurrent(){
-  var s=state.settings;
-  ["salary","savingTarget","mortgage","fixedOther","familyShare","familyBudget","paypayBudget"].forEach(function(id){
-    if(s[id]!==undefined)el(id).value=s[id]||((id==="familyShare")?0.6667:"");
-  });
+function currentMonth(){return state.activePeriod?state.months[state.activePeriod]:null}
+function defaultsForNew(){
+  var keys=Object.keys(state.months).sort().reverse();
+  var src=state.activePeriod&&state.months[state.activePeriod]?state.months[state.activePeriod]:(keys.length?state.months[keys[0]]:null);
+  return src?src.settings:{}
 }
-function pullCurrent(){
-  state.settings.salary=num("salary");
-  state.settings.savingTarget=num("savingTarget");
-  state.settings.mortgage=num("mortgage");
-  state.settings.fixedOther=num("fixedOther");
-  state.settings.familyShare=num("familyShare");
-  state.settings.familyBudget=num("familyBudget");
-  state.settings.paypayBudget=num("paypayBudget");
+function pickerPeriod(){
+  var y=parseInt(el("workYear").value,10),m=parseInt(el("workMonth").value,10);
+  if(!y||y<1||!m||m<1||m>12)return null;
+  return String(y)+"-"+String(m).padStart(2,"0")
+}
+function fillPicker(){
+  var d=new Date();el("workYear").value=d.getFullYear();el("workMonth").innerHTML="";
+  for(var m=1;m<=12;m++){var o=document.createElement("option");o.value=m;o.textContent=m+"月";el("workMonth").appendChild(o)}
+  el("workMonth").value=d.getMonth()+1
+}
+function openPeriod(p){
+  if(!p){toast("年と月を指定してください");return}
+  if(!state.months[p])state.months[p]=blankMonth(defaultsForNew());
+  state.activePeriod=p;state.months[p].updatedAt=Date.now();save();
+  hydrateWorkspace();renderAll();toast(periodLabel(p)+"を開きました")
+}
+function hydrateWorkspace(){
+  var m=currentMonth();if(!m){el("workspace").style.display="none";return}
+  el("workspace").style.display="block";
+  var s=m.settings;
+  ["salary","savingTarget","mortgage","fixedOther","familyShare","familyBudget","paypayBudget"].forEach(function(id){el(id).value=(s[id]!==undefined?s[id]:"")});
+  el("otherExpense").value=m.otherExpense||"";
+  el("monthMemo").value=m.memo||"";
+  el("activePeriodLabel").textContent=periodLabel(state.activePeriod);
+  el("monthStatusBadge").textContent=m.status==="final"?"確定済み":"編集中";
+  el("monthStatusBadge").className=m.status==="final"?"badge":"badge draft";
+}
+function pullSettings(){
+  var m=currentMonth();if(!m)return;
+  ["salary","savingTarget","mortgage","fixedOther","familyShare","familyBudget","paypayBudget"].forEach(function(id){m.settings[id]=n(id)});
+  m.updatedAt=Date.now()
 }
 function added(card){
-  var cut=(state.sync[card]&&state.sync[card].at)||0,total=0;
-  state.entries.forEach(function(e){if(e.card===card&&e.at>cut)total+=Number(e.amount)||0});
+  var m=currentMonth(),cut=(m.sync[card]&&m.sync[card].at)||0,total=0;
+  m.entries.forEach(function(e){if(e.card===card&&e.at>cut)total+=Number(e.amount)||0});
   return total
 }
-function currentCard(card){return Number(state.sync[card].amount||0)+added(card)}
-function currentSummary(){
-  var s=state.settings,fam=currentCard("family"),pay=currentCard("paypay");
-  var fixed=Number(s.mortgage||0)+Number(s.fixedOther||0);
-  var famMine=fam*Number(s.familyShare||0);
-  var expense=fixed+famMine+pay;
-  var saving=Number(s.salary||0)-expense;
-  return {fixed:fixed,familyTotal:fam,familyMine:famMine,paypay:pay,expense:expense,saving:saving,savingRate:Number(s.salary||0)>0?saving/Number(s.salary||0):0,gap:saving-Number(s.savingTarget||0),left:Number(s.salary||0)-fixed-Number(s.savingTarget||0)-famMine-pay};
+function cardCurrent(card){
+  var m=currentMonth();return m?Number(m.sync[card].amount||0)+added(card):0
 }
-function daysMonth(){
-  var d=new Date(),last=new Date(d.getFullYear(),d.getMonth()+1,0);
-  return Math.max(1,last.getDate()-d.getDate()+1)
+function summary(m){
+  if(!m)return{fixed:0,familyTotal:0,familyMine:0,paypay:0,other:0,expense:0,saving:0,rate:0,gap:0,left:0};
+  var s=m.settings,fam=Number(m.sync.family.amount||0),pay=Number(m.sync.paypay.amount||0);
+  // When active, include unsynced manual additions; for archived too, entries after last sync count.
+  var famAdd=0,payAdd=0,fc=m.sync.family.at||0,pc=m.sync.paypay.at||0;
+  m.entries.forEach(function(e){
+    if(e.card==="family"&&e.at>fc)famAdd+=Number(e.amount)||0;
+    if(e.card==="paypay"&&e.at>pc)payAdd+=Number(e.amount)||0;
+  });
+  fam+=famAdd;pay+=payAdd;
+  var fixed=Number(s.mortgage||0)+Number(s.fixedOther||0),famMine=fam*Number(s.familyShare||0),other=Number(m.otherExpense||0);
+  var expense=fixed+famMine+pay+other,saving=Number(s.salary||0)-expense;
+  return{fixed:fixed,familyTotal:fam,familyMine:famMine,paypay:pay,other:other,expense:expense,saving:saving,rate:Number(s.salary||0)>0?saving/Number(s.salary||0):0,gap:saving-Number(s.savingTarget||0),left:Number(s.salary||0)-fixed-Number(s.savingTarget||0)-famMine-pay-other}
 }
-function daysWeek(){
-  var d=new Date(),dow=d.getDay(),toSun=dow===0?0:7-dow;
-  return Math.max(1,Math.min(toSun+1,daysMonth()))
-}
-function renderCurrent(){
-  var s=state.settings,c=currentSummary();
-  el("monthLeft").textContent=yen(c.left);
-  if(Number(s.salary||0)<=0){el("monthStatus").textContent="まず設定を入力してください";el("monthStatus").className="status"}
-  else if(c.left>=0){el("monthStatus").textContent="貯金目標を守ったまま使える残額";el("monthStatus").className="status good"}
-  else{el("monthStatus").textContent="貯金目標を "+yen(Math.abs(c.left))+" 超過見込み";el("monthStatus").className="status bad"}
-  var dm=daysMonth(),dw=daysWeek();
-  el("weekLeft").textContent=yen(c.left>0?c.left/dm*dw:c.left);
-  el("weekHint").textContent=c.left>=0?"残り"+dm+"日で均等配分した、日曜まで"+dw+"日分の目安":"今月残額がマイナスです";
-  el("familyCurrent").textContent=yen(c.familyTotal);
-  el("paypayCurrent").textContent=yen(c.paypay);
-  el("familyRemain").textContent=yen(Number(s.familyBudget||0)-c.familyTotal);
-  el("paypayRemain").textContent=yen(Number(s.paypayBudget||0)-c.paypay);
-  el("fixedTotal").textContent=yen(c.fixed);
-  el("familyMine").textContent=yen(c.familyMine);
-  el("paypayMine").textContent=yen(c.paypay);
-  el("expenseForecast").textContent=yen(c.expense);
-  el("savingForecast").textContent=yen(c.saving);
-  el("savingGap").textContent=yen(c.gap);
-  el("familySyncInfo").textContent=state.sync.family.at?"同期済み：実績 "+yen(state.sync.family.amount)+" ＋ 同期後入力 "+yen(added("family")):"未同期";
-  el("paypaySyncInfo").textContent=state.sync.paypay.at?"同期済み：実績 "+yen(state.sync.paypay.amount)+" ＋ 同期後入力 "+yen(added("paypay")):"未同期";
-  renderEntries();
+function isCurrentCalendarMonth(){return state.activePeriod===nowPeriod()}
+function remainingDaysMonth(){var d=new Date(),last=new Date(d.getFullYear(),d.getMonth()+1,0);return Math.max(1,last.getDate()-d.getDate()+1)}
+function remainingDaysWeek(){var d=new Date(),dow=d.getDay(),toSun=dow===0?0:7-dow;return Math.max(1,Math.min(toSun+1,remainingDaysMonth()))}
+function renderWorkspace(){
+  var m=currentMonth();if(!m)return;
+  var s=m.settings,q=summary(m);
+  el("monthLeft").textContent=yen(q.left);
+  if(Number(s.salary||0)<=0){el("monthStatus").textContent="手取り給与を入力してください";el("monthStatus").className="status"}
+  else if(q.left>=0){el("monthStatus").textContent="貯金目標を守ったまま使える残額";el("monthStatus").className="status good"}
+  else{el("monthStatus").textContent="貯金目標を "+yen(Math.abs(q.left))+" 超過見込み";el("monthStatus").className="status bad"}
+
+  if(isCurrentCalendarMonth()){
+    var dm=remainingDaysMonth(),dw=remainingDaysWeek();
+    el("weekLeft").textContent=yen(q.left>0?q.left/dm*dw:q.left);
+    el("weekHint").textContent="今月残り"+dm+"日で均等配分した、日曜まで"+dw+"日分の目安";
+  }else{
+    el("weekLeft").textContent="—";
+    el("weekHint").textContent="今週残額は現在の年月を開いたときだけ表示します";
+  }
+
+  el("familyCurrent").textContent=yen(q.familyTotal);el("paypayCurrent").textContent=yen(q.paypay);
+  el("familyRemain").textContent=yen(Number(s.familyBudget||0)-q.familyTotal);el("paypayRemain").textContent=yen(Number(s.paypayBudget||0)-q.paypay);
+  el("familySyncInfo").textContent=m.sync.family.at?"実績 "+yen(m.sync.family.amount)+" ＋ 同期後入力 "+yen(added("family")):"未同期";
+  el("paypaySyncInfo").textContent=m.sync.paypay.at?"実績 "+yen(m.sync.paypay.amount)+" ＋ 同期後入力 "+yen(added("paypay")):"未同期";
+  el("fixedTotal").textContent=yen(q.fixed);el("familyMine").textContent=yen(q.familyMine);el("paypayMine").textContent=yen(q.paypay);el("otherMine").textContent=yen(q.other);
+  el("expenseForecast").textContent=yen(q.expense);el("savingForecast").textContent=yen(q.saving);el("savingRate").textContent=pct(q.rate);el("savingGap").textContent=yen(q.gap);
+  el("reopenMonth").style.display=m.status==="final"?"block":"none";
+  el("finalizeMonth").textContent=m.status==="final"?"確定内容を更新":"この月の収支を確定";
+  renderEntries()
 }
 function renderEntries(){
-  var box=el("entries"),arr=state.entries.slice().sort(function(a,b){return b.at-a.at});
-  box.innerHTML="";
-  if(!arr.length){box.innerHTML='<div class="empty">まだ支出履歴はありません。</div>';return}
-  arr.forEach(function(e){
-    var d=new Date(e.at),row=document.createElement("div");
-    row.className="entry";
-    row.innerHTML='<div class="small">'+(d.getMonth()+1)+'/'+d.getDate()+'</div><div>'+(e.card==="family"?"家族":"PayPay")+' / '+escapeHtml(e.memo||categoryName(e.category))+'</div><div class="money">'+yen(e.amount)+'</div><button type="button" class="delete">×</button>';
-    row.querySelector(".delete").onclick=function(){state.entries=state.entries.filter(function(x){return x.id!==e.id});save();renderCurrent();toast("削除しました")};
+  var m=currentMonth(),box=el("entries");box.innerHTML="";
+  if(!m||!m.entries.length){box.innerHTML='<div class="empty">まだ支出履歴はありません。</div>';return}
+  m.entries.slice().sort(function(a,b){return b.at-a.at}).forEach(function(e){
+    var d=new Date(e.at),row=document.createElement("div");row.className="entry";
+    row.innerHTML='<div class="small">'+(d.getMonth()+1)+'/'+d.getDate()+'</div><div>'+(e.card==="family"?"家族":"PayPay")+' / '+esc(e.memo||e.category)+'</div><div class="money">'+yen(e.amount)+'</div><button type="button" class="delete">×</button>';
+    row.querySelector(".delete").onclick=function(){m.entries=m.entries.filter(function(x){return x.id!==e.id});m.updatedAt=Date.now();save();renderAll();toast("削除しました")};
     box.appendChild(row)
   })
 }
-function syncCard(card,inputId){
-  var input=el(inputId),amount=parseFloat(input.value);
-  if(isNaN(amount)||amount<0){toast("現在利用額を入力してください");return}
-  state.sync[card]={amount:amount,at:Date.now()};
-  input.value="";
-  save();renderCurrent();toast(card==="family"?"家族カードを反映しました":"PayPayを反映しました")
-}
-
-/* ----- monthly record editor ----- */
-var activeRecordPeriod = null;
-
-function fillYearMonthOptions(){
-  var now=new Date(),y=el("recordYear"),m=el("recordMonth");
-  m.innerHTML="";
-  for(var mo=1;mo<=12;mo++){
-    var op=document.createElement("option");op.value=mo;op.textContent=mo+"月";m.appendChild(op)
-  }
-  y.value=now.getFullYear();
-  m.value=now.getMonth()+1;
-}
-
-function pickerPeriod(){
-  var yr=parseInt(el("recordYear").value,10);
-  var mo=parseInt(el("recordMonth").value,10);
-  if(!yr || yr<1 || !mo || mo<1 || mo>12) return null;
-  return String(yr)+"-"+String(mo).padStart(2,"0");
-}
-
-function selectedPeriod(){
-  return activeRecordPeriod;
-}
-
-function setEditorEnabled(enabled){
-  el("recordEditor").className = enabled ? "" : "editor-disabled";
-}
-
-function clearRecordInputs(useDefaults){
-  var s=state.settings;
-  el("recordSalary").value="";
-  el("recordSavingTarget").value=useDefaults&&s.savingTarget?s.savingTarget:"";
-  el("recordMortgage").value=useDefaults&&s.mortgage?s.mortgage:"";
-  el("recordFixedOther").value=useDefaults&&s.fixedOther?s.fixedOther:"";
-  el("recordFamilyTotal").value="";
-  el("recordFamilyShare").value=(useDefaults&&s.familyShare)?s.familyShare:0.6667;
-  el("recordPaypay").value="";
-  el("recordOtherExpense").value="";
-  el("recordMemo").value="";
-  renderRecordCalc();
-}
-
-function archiveToEditor(a){
-  var s=a.settings||{},q=a.summary||{};
-  el("recordSalary").value=s.salary||"";
-  el("recordSavingTarget").value=s.savingTarget||"";
-  el("recordMortgage").value=s.mortgage||"";
-  el("recordFixedOther").value=s.fixedOther||"";
-  el("recordFamilyTotal").value=(q.familyTotal!==undefined?q.familyTotal:(s.familyTotal||""));
-  el("recordFamilyShare").value=(s.familyShare!==undefined?s.familyShare:0.6667);
-  el("recordPaypay").value=(q.paypay!==undefined?q.paypay:"");
-  el("recordOtherExpense").value=(q.otherExpense!==undefined?q.otherExpense:"");
-  el("recordMemo").value=a.memo||"";
-  renderRecordCalc();
-}
-
-function openPeriod(p){
-  if(!p){toast("年と月を指定してください");return}
-  activeRecordPeriod=p;
-  var a=state.archives[p];
-  setEditorEnabled(true);
-  el("recordPeriodLabel").textContent=periodLabel(p);
-
-  if(a){
-    archiveToEditor(a);
-    el("recordBadge").textContent="保存済み";
-    el("recordBadge").className="badge";
-    el("recordSavedInfo").textContent="最終更新："+new Date(a.closedAt||a.updatedAt||Date.now()).toLocaleString("ja-JP");
-    el("saveMonthlyRecord").textContent="この年月の記録を更新";
-    el("deleteMonthlyRecord").style.display="block";
-    toast(periodLabel(p)+"を開きました");
-  }else{
-    clearRecordInputs(true);
-    el("recordBadge").textContent="新規";
-    el("recordBadge").className="badge new";
-    el("recordSavedInfo").textContent="この年月の記録はまだありません。新規作成できます。";
-    el("saveMonthlyRecord").textContent="この年月の記録を保存";
-    el("deleteMonthlyRecord").style.display="none";
-    toast(periodLabel(p)+"の新規記録を作成できます");
-  }
-}
-
-function resetRecordChooser(){
-  activeRecordPeriod=null;
-  setEditorEnabled(false);
-  el("recordPeriodLabel").textContent="年月を指定して「新規作成／開く」を押してください";
-  el("recordSavedInfo").textContent="未選択";
-  el("recordBadge").textContent="未選択";
-  el("recordBadge").className="badge new";
-  el("deleteMonthlyRecord").style.display="none";
-}
-
-function recordCalc(){
-  var salary=num("recordSalary"),target=num("recordSavingTarget"),mort=num("recordMortgage"),fixedOther=num("recordFixedOther");
-  var famTotal=num("recordFamilyTotal"),share=num("recordFamilyShare"),pay=num("recordPaypay"),other=num("recordOtherExpense");
-  var fixed=mort+fixedOther,famMine=famTotal*share,expense=fixed+famMine+pay+other,saving=salary-expense;
-  return {fixed:fixed,familyTotal:famTotal,familyMine:famMine,paypay:pay,otherExpense:other,expense:expense,saving:saving,savingRate:salary>0?saving/salary:0,gap:saving-target}
-}
-function renderRecordCalc(){
-  var c=recordCalc();
-  el("recordFixed").textContent=yen(c.fixed);
-  el("recordFamilyMine").textContent=yen(c.familyMine);
-  el("recordExpense").textContent=yen(c.expense);
-  el("recordSaving").textContent=yen(c.saving);
-  el("recordSavingRate").textContent=pct(c.savingRate);
-  el("recordGap").textContent=yen(c.gap)
-}
-function currentToEditor(){
-  pullCurrent();var c=currentSummary();
-  el("recordSalary").value=state.settings.salary||"";
-  el("recordSavingTarget").value=state.settings.savingTarget||"";
-  el("recordMortgage").value=state.settings.mortgage||"";
-  el("recordFixedOther").value=state.settings.fixedOther||"";
-  el("recordFamilyTotal").value=c.familyTotal||"";
-  el("recordFamilyShare").value=state.settings.familyShare||0.6667;
-  el("recordPaypay").value=c.paypay||"";
-  el("recordOtherExpense").value="";
-  renderRecordCalc();
-  toast("現在の管理中データをコピーしました")
-}
-function saveSelectedRecord(){
-  var p=selectedPeriod(),salary=num("recordSalary");
-  if(!p){toast("先に保存する年月を新規作成／開いてください");return}
-  if(salary<=0){toast("手取り給与を入力してください");return}
-  var old=state.archives[p],c=recordCalc();
-  var settings={
-    salary:salary,
-    savingTarget:num("recordSavingTarget"),
-    mortgage:num("recordMortgage"),
-    fixedOther:num("recordFixedOther"),
-    familyShare:num("recordFamilyShare"),
-    familyBudget:old&&old.settings?Number(old.settings.familyBudget||0):0,
-    paypayBudget:old&&old.settings?Number(old.settings.paypayBudget||0):0
-  };
-  state.archives[p]={
-    period:p,
-    closedAt:Date.now(),
-    settings:settings,
-    summary:c,
-    memo:el("recordMemo").value,
-    entries:old&&Array.isArray(old.entries)?old.entries:[]
-  };
-  save();renderArchives();openPeriod(p);toast(periodLabel(p)+"を保存しました")
-}
-function renderArchives(){
-  var box=el("archives"),keys=Object.keys(state.archives).sort().reverse(),total=0,rateTotal=0;
-  box.innerHTML="";
-  keys.forEach(function(k){
-    var a=state.archives[k],s=a.summary||{};
-    total+=Number(s.saving)||0;rateTotal+=Number(s.savingRate)||0
-  });
-  el("totalSavings").textContent=yen(total);
-  el("avgSavings").textContent=yen(keys.length?total/keys.length:0);
-  el("avgRate").textContent=keys.length?pct(rateTotal/keys.length):"0%";
-  if(!keys.length){box.innerHTML='<div class="empty">保存済みの月はまだありません。上の「月次記録」で年月を選んで保存できます。</div>';return}
-  keys.forEach(function(k){
-    var a=state.archives[k],s=a.summary||{},wrap=document.createElement("div");
-    wrap.className="archive";
-    wrap.innerHTML='<div class="archive-head"><div><div class="archive-title">'+periodLabel(k)+'</div><div class="small">'+(a.memo?escapeHtml(a.memo).slice(0,45):"")+'</div></div><button type="button" class="secondary smallbtn openRecord">開く</button></div>'+
-      '<div class="archive-main">'+
-      '<div class="archive-stat"><div class="label">手取り</div><strong>'+yen((a.settings||{}).salary)+'</strong></div>'+
-      '<div class="archive-stat"><div class="label">支出</div><strong>'+yen(s.expense)+'</strong></div>'+
-      '<div class="archive-stat"><div class="label">貯金</div><strong>'+yen(s.saving)+'</strong></div>'+
-      '</div>';
-    wrap.querySelector(".openRecord").onclick=function(){
-      var parts=k.split("-");
-      el("recordYear").value=Number(parts[0]);
-      el("recordMonth").value=Number(parts[1]);
-      openPeriod(k);
-      el("monthlyRecordCard").scrollIntoView({behavior:"smooth",block:"start"})
-    };
-    box.appendChild(wrap)
+function renderMonthList(){
+  var box=el("monthList"),keys=Object.keys(state.months).sort().reverse(),total=0,rate=0,count=0;box.innerHTML="";
+  keys.forEach(function(p){var q=summary(state.months[p]);if(Number(state.months[p].settings.salary||0)>0){total+=q.saving;rate+=q.rate;count++}});
+  el("totalSavings").textContent=yen(total);el("avgSavings").textContent=yen(count?total/count:0);el("avgRate").textContent=count?pct(rate/count):"0%";
+  if(!keys.length){box.innerHTML='<div class="empty">まだ月が作成されていません。</div>';return}
+  keys.forEach(function(p){
+    var m=state.months[p],q=summary(m),w=document.createElement("div");w.className="archive";
+    w.innerHTML='<div class="archive-head"><div><div class="archive-title">'+periodLabel(p)+' <span class="'+(m.status==="final"?"badge":"badge draft")+'">'+(m.status==="final"?"確定済み":"編集中")+'</span></div><div class="small">'+esc(m.memo||"")+'</div></div><button type="button" class="secondary smallbtn">開く</button></div>'+
+    '<div class="archive-main"><div class="archive-stat"><div class="label">手取り</div><strong>'+yen(m.settings.salary)+'</strong></div><div class="archive-stat"><div class="label">支出</div><strong>'+yen(q.expense)+'</strong></div><div class="archive-stat"><div class="label">貯金</div><strong>'+yen(q.saving)+'</strong></div></div>';
+    w.querySelector("button").onclick=function(){var a=p.split("-");el("workYear").value=Number(a[0]);el("workMonth").value=Number(a[1]);openPeriod(p);window.scrollTo({top:0,behavior:"smooth"})};
+    box.appendChild(w)
   })
 }
-
-/* ----- events ----- */
+function renderAll(){hydrateWorkspace();renderWorkspace();renderMonthList()}
+function syncCard(card,input){
+  var m=currentMonth(),amount=parseFloat(el(input).value);
+  if(isNaN(amount)||amount<0){toast("現在利用額を入力してください");return}
+  pullSettings();m.sync[card]={amount:amount,at:Date.now()};m.updatedAt=Date.now();el(input).value="";save();renderAll();toast(card==="family"?"家族カードを反映しました":"PayPayを反映しました")
+}
 function bind(){
-  el("saveSettings").onclick=function(){pullCurrent();save();renderCurrent();toast("設定を反映しました")};
-  el("syncFamily").onclick=function(){pullCurrent();syncCard("family","familySnapshot")};
-  el("syncPaypay").onclick=function(){pullCurrent();syncCard("paypay","paypaySnapshot")};
+  el("openMonth").onclick=function(){var p=pickerPeriod();if(!p){toast("年と月を指定してください");return}openPeriod(p)};
+  el("saveSettings").onclick=function(){pullSettings();save();renderAll();toast("この月の設定を保存しました")};
+  el("syncFamily").onclick=function(){syncCard("family","familySnapshot")};
+  el("syncPaypay").onclick=function(){syncCard("paypay","paypaySnapshot")};
   el("addEntry").onclick=function(){
-    var amount=parseFloat(el("entryAmount").value);
-    if(isNaN(amount)||amount<=0){toast("使った金額を入力してください");return}
-    pullCurrent();
-    state.entries.push({id:String(Date.now())+"_"+String(Math.random()).slice(2),at:Date.now(),card:el("entryCard").value,category:el("entryCategory").value,amount:amount,memo:el("entryMemo").value});
-    el("entryAmount").value="";el("entryMemo").value="";
-    save();renderCurrent();toast(yen(amount)+" を追加しました")
+    var m=currentMonth(),amount=parseFloat(el("entryAmount").value);if(isNaN(amount)||amount<=0){toast("使った金額を入力してください");return}
+    pullSettings();m.entries.push({id:String(Date.now())+"_"+String(Math.random()).slice(2),at:Date.now(),card:el("entryCard").value,category:el("entryCategory").value,amount:amount,memo:el("entryMemo").value});
+    m.updatedAt=Date.now();el("entryAmount").value="";el("entryMemo").value="";save();renderAll();toast(yen(amount)+" を追加しました")
   };
-  el("clearHistory").onclick=function(){if(confirm("今月の手入力履歴をすべて削除しますか？")){state.entries=[];save();renderCurrent();toast("履歴を削除しました")}};
+  el("saveExtra").onclick=function(){var m=currentMonth();m.otherExpense=n("otherExpense");m.memo=el("monthMemo").value;m.updatedAt=Date.now();save();renderAll();toast("追加情報を保存しました")};
+  el("finalizeMonth").onclick=function(){
+    var m=currentMonth();pullSettings();m.otherExpense=n("otherExpense");m.memo=el("monthMemo").value;
+    if(Number(m.settings.salary||0)<=0){toast("手取り給与を入力してください");return}
+    m.status="final";m.updatedAt=Date.now();save();renderAll();toast(periodLabel(state.activePeriod)+"を確定しました")
+  };
+  el("reopenMonth").onclick=function(){var m=currentMonth();m.status="draft";m.updatedAt=Date.now();save();renderAll();toast("確定を解除しました")};
+  el("clearHistory").onclick=function(){var m=currentMonth();if(confirm(periodLabel(state.activePeriod)+"の手入力履歴を削除しますか？")){m.entries=[];m.updatedAt=Date.now();save();renderAll();toast("履歴を削除しました")}};
   el("testButton").onclick=function(){toast("ボタンは正常に動いています");el("appStatus").textContent="✓ ボタン動作確認済み"};
-
-  el("openRecordPeriod").onclick=function(){
-    var p=pickerPeriod();
-    if(!p){toast("年と月を指定してください");return}
-    openPeriod(p);
-  };
-  ["recordSalary","recordSavingTarget","recordMortgage","recordFixedOther","recordFamilyTotal","recordFamilyShare","recordPaypay","recordOtherExpense"].forEach(function(id){
-    el(id).addEventListener("input",renderRecordCalc)
-  });
-  el("copyCurrentToRecord").onclick=currentToEditor;
-  el("clearRecordForm").onclick=function(){clearRecordInputs(false);toast("入力欄をクリアしました")};
-  el("saveMonthlyRecord").onclick=saveSelectedRecord;
-  el("deleteMonthlyRecord").onclick=function(){
-    var p=selectedPeriod();
-    if(!p || !state.archives[p])return;
-    if(confirm(periodLabel(p)+"の記録を削除しますか？")){
-      delete state.archives[p];save();renderArchives();openPeriod(p);toast("記録を削除しました")
-    }
-  };
-
   el("exportBackup").onclick=function(){
-    var text=JSON.stringify(state,null,2),blob=new Blob([text],{type:"application/json"}),name="kakei-backup-"+periodNow()+".json";
-    try{
-      var file=new File([blob],name,{type:"application/json"});
-      if(navigator.canShare&&navigator.canShare({files:[file]})){navigator.share({files:[file],title:"家計管理バックアップ"}).catch(function(){});return}
-    }catch(e){}
+    var blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"}),name="kakei-backup.json";
+    try{var file=new File([blob],name,{type:"application/json"});if(navigator.canShare&&navigator.canShare({files:[file]})){navigator.share({files:[file],title:"家計管理バックアップ"}).catch(function(){});return}}catch(e){}
     var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},500)
   };
   el("importBackup").onclick=function(){el("backupFile").click()};
   el("backupFile").onchange=function(){
-    var f=this.files&&this.files[0];if(!f)return;
-    var r=new FileReader();
-    r.onload=function(){
-      try{
-        var x=JSON.parse(r.result);
-        if(!x||!x.settings||!x.sync||!Array.isArray(x.entries))throw new Error("bad");
-        if(confirm("現在のデータをバックアップ内容で置き換えますか？")){
-          normalizeLoaded(x);save();hydrateCurrent();renderCurrent();renderArchives();resetRecordChooser();toast("バックアップを復元しました")
-        }
-      }catch(e){alert("このファイルは家計アプリのバックアップとして読み込めませんでした")}
-    };
+    var f=this.files&&this.files[0];if(!f)return;var r=new FileReader();
+    r.onload=function(){try{var x=JSON.parse(r.result);if(!x||!x.months)throw new Error();if(confirm("現在のデータをバックアップ内容で置き換えますか？")){state=x;save();renderAll();toast("復元しました")}}catch(e){alert("家計アプリのバックアップとして読み込めませんでした")}};
     r.readAsText(f);this.value=""
-  };
+  }
 }
-
-load();
-hydrateCurrent();
-fillYearMonthOptions();
-bind();
-renderCurrent();
-renderArchives();
-resetRecordChooser();
+fillPicker();load();bind();
+if(state.activePeriod&&state.months[state.activePeriod]){
+  var a=state.activePeriod.split("-");el("workYear").value=Number(a[0]);el("workMonth").value=Number(a[1]);renderAll()
+}else{
+  el("workspace").style.display="none";renderMonthList()
+}
 el("appStatus").textContent="✓ アプリ読み込み完了";
 })();
 </script>
 <script>
-if("serviceWorker" in navigator){
-  window.addEventListener("load",function(){navigator.serviceWorker.register("./sw.js").catch(function(){})})
-}
+if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("./sw.js").catch(function(){})})}
 </script>
 </body>
 </html>
